@@ -1,5 +1,6 @@
 #include "vector.h"
 #include "LineForm.h"
+#include "test.h"
 #include <stdio.h>
 
 const char * MSG[] = {"1.EXIT", "2.Enter lineform (in real)", "3. Enter lineform (in complex)", "4. SUM (NUM1, NUM2)", "5. COMP (NUM, SCLAR)" , "6. FUNC (NUM, ARGV)" , "7. List lineform" };
@@ -176,12 +177,10 @@ int main(int argc, char** argv) {
             }
         }
     } else {
-        FILE * fout = fopen(argv[1], "r");
-        if(!fout) {
-            fprintf(stderr, "File not found\n");
-            return -1; 
+        if (!strcmp(argv[1], "test")) {
+            // test maker
         }
-        fscanf(fout, "%d", &count);
+        
 
     }
 
