@@ -59,7 +59,7 @@ int testsum() {
         LineFormR * v2 = newLineFormRn(a2, n2);
         LineFormR * v3 = newLineFormRn(a3, n3);
         sum(v1, v2);
-        if (n1 != n3 || memcmp(v1->head, v3->head, n1)) {
+        if (v1->len != v3->len || memcmp(v1->head, v3->head, v1->len * v1->size)) {
             fprintf(stdout ,"testsum(): ERORR SUM in test: %d" , i);
             deletevector(v1);
             deletevector(v2);
@@ -102,7 +102,7 @@ int testsumc() {
         LineFormC * v2 = newLineFormCn(a2, n2);
         LineFormC * v3 = newLineFormCn(a3, n3);
         sumc(v1, v2);
-        if (n1 != n3 || memcmp(v1->head, v3->head, n1)) {
+        if (v1->len != v3->len || memcmp(v1->head, v3->head, v1->len * v1->size)) {
             fprintf(stdout ,"testsumc(): ERORR SUMC in test: %d" , i);
             deletevector(v1);
             deletevector(v2);
