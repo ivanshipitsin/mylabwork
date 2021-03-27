@@ -178,10 +178,8 @@ int main(int argc, char** argv) {
         }
     } else {
         if (!strcmp(argv[1], "test")) {
-            // test maker
+            test();
         }
-        
-
     }
 
     for (int i = 0; i < count; i++) {
