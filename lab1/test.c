@@ -47,21 +47,13 @@ int testsum() {
     for (int i = 1; i <= n; i++) {
         int n1, n2, n3;
         fscanf(tsfile, "%d", n1);
-        double *a1 = (double *)calloc(n1, sizeof(double));
-        for (int j = 0; j < n1; j++){
-            fscanf(tsfile, "%lf", a1 + j);
-        }
+        double *a1 = read(tsfile, n1);
 
         fscanf(tsfile, "%d", n2);
-        double *a2 = (double *)calloc(n2, sizeof(double));
-        for (int j = 0; j < n2; j++){
-            fscanf(tsfile, "%lf", a2 + j);
-        }
+        double *a2 = read(tsfile, n2);
+
         fscanf(tsfile, "%d", n3);
-        double *a3 = (double *)calloc(n3, sizeof(double));
-        for (int j = 0; j < n3; j++){
-            fscanf(tsfile, "%lf", a3 + j);
-        }
+        double *a3 = read(tsfile, n3);
 
         LineFormR * v1 = newLineFormRn(a1, n1);
         LineFormR * v2 = newLineFormRn(a2, n2);
@@ -87,7 +79,7 @@ int testsum() {
     return 0;
 }
 
-int testsum() {
+int testsumc() {
     FILE * tsfile = fopen("test/sumc.test","r");
     if (!tsfile) {
         fprintf(stderr, "testsumc(): TEST FILE NOT FOUND\n");
@@ -98,35 +90,20 @@ int testsum() {
     for (int i = 1; i <= n; i++) {
         int n1, n2, n3;
         fscanf(tsfile, "%d", n1);
-        double complex *a1 = (double complex *)calloc(n1, sizeof(double complex));
-        double real = 0, im = 0;
-        for (int j = 0; j < n1; j++){
-            fscanf(tsfile, "%lf %lf", &real, &im);
-            __real__ (a1[j]) = real;
-            __imag__ (a1[j]) = im;
-        }
+        double complex *a1 = readc(tsfile, n1);
 
         fscanf(tsfile, "%d", n2);
-        double complex *a2 = (double complex*)calloc(n2, sizeof(double complex));
-        for (int j = 0; j < n2; j++){
-            fscanf(tsfile, "%lf %lf", &real, &im);
-            __real__ (a2[j]) = real;
-            __imag__ (a2[j]) = im;
-        }
+        double complex *a2 = readc(tsfile, n2);
+
         fscanf(tsfile, "%d", n3);
-        double complex *a3 = (double complex *)calloc(n3, sizeof(double complex));
-        for (int j = 0; j < n3; j++){
-            fscanf(tsfile, "%lf %lf", &real, &im);
-            __real__ (a3[j]) = real;
-            __imag__ (a3[j]) = im;
-        }
+        double complex *a3 = readc(tsfile, n3);
 
         LineFormC * v1 = newLineFormCn(a1, n1);
         LineFormC * v2 = newLineFormCn(a2, n2);
         LineFormC * v3 = newLineFormCn(a3, n3);
         sumc(v1, v2);
         if (n1 != n3 || memcmp(v1->head, v3->head, n1)) {
-            fprintf(stdout ,"testsumc(): ERORR SUM in test: %d" , i);
+            fprintf(stdout ,"testsumc(): ERORR SUMC in test: %d" , i);
             deletevector(v1);
             deletevector(v2);
             deletevector(v3);
@@ -157,15 +134,10 @@ int testcomp() {
         int n1;
         double scalr;
         fscanf(tcfile, "%d", n1);
-        double *a1 = (double *)calloc(n1, sizeof(double));
-        for (int j = 0; j < n1; j++){
-            fscanf(tcfile, "%lf", a1 + j);
-        }
-        fscnaf(tcfile, "%lf", scalr);
-        double *a2 = (double *)calloc(n1, sizeof(double));
-        for (int j = 0; j < n1; j++){
-            fscanf(tcfile, "%lf", a2 + j);
-        }
+        double *a1 = read(tcfile, n1);
+        
+        fscanf(tcfile, "%lf", scalr);
+        double *a2 = read(tcfile, n1);
 
         LineFormR * v1 = newLineFormRn(a1, n1);
         LineFormR * v2 = newLineFormRn(a2, n1);
@@ -199,28 +171,21 @@ int testcompc() {
         int n1;
         double complex scalr;
         double real, im;
+
         fscanf(tcfile, "%d", n1);
-        double complex *a1 = (double complex*)calloc(n1, sizeof(double complex));
-        for (int j = 0; j < n1; j++){
-            fscanf(tcfile, "%lf %lf", &real, &im);
-            __real__ (a1[j]) = real;
-            __imag__ (a1[j]) = im;
-        }
-        fscnaf(tcfile, "%lf %lf", &real, &im);
+        double complex *a1 = readc(tcfile, n1);
+
+        fscanf(tcfile, "%lf %lf", &real, &im);
         __real__ scalr = real;
         __imag__ scalr = im;
-        double complex *a2 = (double complex *)calloc(n1, sizeof(double complex));
-        for (int j = 0; j < n1; j++){
-             fscanf(tcfile, "%lf %lf", &real, &im);
-            __real__ (a2[j]) = real;
-            __imag__ (a2[j]) = im;
-        }
+
+        double complex *a2 = readc(tcfile, n1);
 
         LineFormC * v1 = newLineFormCn(a1, n1);
         LineFormC * v2 = newLineFormCn(a2, n1);
         compc(v1, scalr);
         if (memcmp(v1->head, v2->head, n1)) {
-            fprintf(stdout ,"testcomp(): ERORR COMP in test: %d" , i);
+            fprintf(stdout ,"testcompc(): ERORR COMPC in test: %d" , i);
             deletevector(v1);
             deletevector(v2);
             free(a1);
@@ -235,23 +200,104 @@ int testcompc() {
     return 0;
 }
 
-int test() {
-    int res[12] = {0};
+int testfunc() {
+    FILE * tsfile = fopen("test/func.test","r");
+    if (!tsfile) {
+        fprintf(stderr, "testfunc(): TEST FILE NOT FOUND\n");
+        return -1;
+    }
+    int n = 0; // amount test
+    fscanf(tsfile, "%d", &n);
+    for (int i = 1; i <= n; i++) {
+        int n1, n2;
 
-    res[0] = testmakevector(); 
-    res[1] = testaddvector();
+        fscanf(tsfile, "%d", n1);
+        double *a1 = read(tsfile, n1);
 
-    res[2] = testsum(); 
-    res[3] = testsumc();
-    res[4] = testcomp();
-    res[5] = testcompc();
-    res[6] = testfunc();
-    res[7] = testfuncc();
+        fscanf(tsfile, "%d", n2);
+        double *a2 = read(tsfile, n2);
 
-    res[8] = testnewlineformr(); 
-    res[9] = testnewlineformc();
-    res[10] = testnewlineformrn();
-    res[11] = testnewlineformcn();
+        double restest = 0;
+        fscanf(tsfile, "%lf", &restest);
+        
+        LineFormR * v1 = newLineFormRn(a1, n1);
+        double res = func(v1, a2, n2);
+        if (res != restest) {
+            fprintf(stdout ,"testfunc(): ERORR FUNC in test: %d" , i);
+            deletevector(v1);
+            free(a1);
+            free(a2);
+            return -i;
+        }
+        deletevector(v1);
+        free(a1);
+        free(a2);
+    }
+    return 0;
+}
 
+int testfuncc() {
+    FILE * tsfile = fopen("test/funcc.test","r");
+    if (!tsfile) {
+        fprintf(stderr, "testfuncc(): TEST FILE NOT FOUND\n");
+        return -1;
+    }
+    int n = 0; // amount test
+    fscanf(tsfile, "%d", &n);
+    for (int i = 1; i <= n; i++) {
+        int n1, n2;
+        double real, im;
+
+        fscanf(tsfile, "%d", n1);
+        double complex *a1 = (double *)calloc(n1, sizeof(double));
+        for (int j = 0; j < n1; j++){
+            fscanf(tsfile, "%lf", &real, &im);
+            __real__ (a1[j]) = real;
+            __imag__ (a1[j]) = im;
+        }
+
+        fscanf(tsfile, "%d", n2);
+        double complex *a2 = (double complex*)calloc(n2, sizeof(double complex));
+        for (int j = 0; j < n2; j++){
+            fscanf(tsfile, "%lf", &real, &im);
+            __real__ (a2[j]) = real;
+            __imag__ (a2[j]) = im;
+        }
+        double complex restest = 0;
+        fscanf(tsfile, "%lf %lf", &real, &im);
+        __real__ restest = real;
+        __imag__ restest = im;
+        LineFormC * v1 = newLineFormCn(a1, n1);
+        double complex res = funcc(v1, a2, n2);
+        if (res != restest) {
+            fprintf(stdout ,"testfuncc(): ERORR FUNCC in test: %d" , i);
+            deletevector(v1);
+            free(a1);
+            free(a2);
+            return -i;
+        }
+        deletevector(v1);
+        free(a1);
+        free(a2);
+    }
+    return 0;
+}
+
+void test() {
+
+    testmakevector(); 
+    testaddvector();
+
+    testsum(); 
+    testsumc();
+    testcomp();
+    testcompc();
+    testfunc();
+    testfuncc();
+
+    testnewlineformr(); 
+    testnewlineformc();
+    testnewlineformrn();
+    testnewlineformcn();
 }
 

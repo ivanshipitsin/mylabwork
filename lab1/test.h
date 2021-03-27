@@ -5,6 +5,8 @@
 #include "LineForm.h"
 #include "vector.h"
 
+#include "utilit.h"
+
 int testmakevector(); // vector function test
 int testaddvector();
 
@@ -22,5 +24,5 @@ int testnewlineformcn();
 
 int testrtoc();
 
-int test();
+void test();
 #endif

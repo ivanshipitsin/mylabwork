@@ -1,14 +1,13 @@
 #include "vector.h"
 #include "LineForm.h"
 #include "test.h"
+#include "utilit.h"
 #include <stdio.h>
 
 const char * MSG[] = {"1.EXIT", "2.Enter lineform (in real)", "3. Enter lineform (in complex)", "4. SUM (NUM1, NUM2)", "5. COMP (NUM, SCLAR)" , "6. FUNC (NUM, ARGV)" , "7. List lineform" };
 const int SMSG = 7;
 
-double * read(FILE *, int);
-double complex * readc(FILE *, int);
-void printLineformR(vector **, int);
+void printLineform(vector **, int);
 int getmenu() {
     char * error = "";
     int ch = 0;
@@ -169,7 +168,7 @@ int main(int argc, char** argv) {
                         break;
                     }
                 case 7:
-                    printLineformR(a, count);
+                    printLineform(a, count);
                     break;
                 default:
                     printf("AAAAAA. zzzzzzzz\n");
@@ -189,22 +188,8 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-double * read(FILE * f, int n) {
-    double *a = (double *)calloc(n, sizeof(double));
-    for (int i = 0; i < n; i++) {
-        if(!fscanf(f, "%lf", a + i)) {
-            if(!a) {
-                return NULL;
-            } else {
-                free(a);
-                return NULL;
-            }
-        }
-    }
-    return a;
-}
 
-void printLineformR(vector ** a, int n) {
+void printLineform(vector ** a, int n) {
     for (int i = 0; i < n; i++) {
         printf("L%d:", i + 1);
         int m = a[i] -> len;
@@ -219,15 +204,4 @@ void printLineformR(vector ** a, int n) {
         }
         printf("\n");
     }    
-}
-
-double complex * readc(FILE * f, int n) {
-    double complex *a = (double complex *)calloc(n, sizeof(double complex));
-    for (int i = 0; i < n; i++) {
-        double im, re;
-        fscanf(f, "%lf %lf", &re, &im);
-        __real__ a[i] = re;
-        __imag__ a[i] = im;
-    }
-    return a;
 }
