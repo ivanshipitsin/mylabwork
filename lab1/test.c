@@ -46,13 +46,13 @@ int testsum() {
     fscanf(tsfile, "%d", &n);
     for (int i = 1; i <= n; i++) {
         int n1, n2, n3;
-        fscanf(tsfile, "%d", n1);
+        fscanf(tsfile, "%d", &n1);
         double *a1 = read(tsfile, n1);
 
-        fscanf(tsfile, "%d", n2);
+        fscanf(tsfile, "%d", &n2);
         double *a2 = read(tsfile, n2);
 
-        fscanf(tsfile, "%d", n3);
+        fscanf(tsfile, "%d", &n3);
         double *a3 = read(tsfile, n3);
 
         LineFormR * v1 = newLineFormRn(a1, n1);
@@ -89,13 +89,13 @@ int testsumc() {
     fscanf(tsfile, "%d", &n);
     for (int i = 1; i <= n; i++) {
         int n1, n2, n3;
-        fscanf(tsfile, "%d", n1);
+        fscanf(tsfile, "%d", &n1);
         double complex *a1 = readc(tsfile, n1);
 
-        fscanf(tsfile, "%d", n2);
+        fscanf(tsfile, "%d", &n2);
         double complex *a2 = readc(tsfile, n2);
 
-        fscanf(tsfile, "%d", n3);
+        fscanf(tsfile, "%d", &n3);
         double complex *a3 = readc(tsfile, n3);
 
         LineFormC * v1 = newLineFormCn(a1, n1);
@@ -133,10 +133,10 @@ int testcomp() {
     for (int i = 1; i <= n; i++) {
         int n1;
         double scalr;
-        fscanf(tcfile, "%d", n1);
+        fscanf(tcfile, "%d", &n1);
         double *a1 = read(tcfile, n1);
         
-        fscanf(tcfile, "%lf", scalr);
+        fscanf(tcfile, "%lf", &scalr);
         double *a2 = read(tcfile, n1);
 
         LineFormR * v1 = newLineFormRn(a1, n1);
@@ -172,7 +172,7 @@ int testcompc() {
         double complex scalr;
         double real, im;
 
-        fscanf(tcfile, "%d", n1);
+        fscanf(tcfile, "%d", &n1);
         double complex *a1 = readc(tcfile, n1);
 
         fscanf(tcfile, "%lf %lf", &real, &im);
@@ -211,10 +211,10 @@ int testfunc() {
     for (int i = 1; i <= n; i++) {
         int n1, n2;
 
-        fscanf(tsfile, "%d", n1);
+        fscanf(tsfile, "%d", &n1);
         double *a1 = read(tsfile, n1);
 
-        fscanf(tsfile, "%d", n2);
+        fscanf(tsfile, "%d", &n2);
         double *a2 = read(tsfile, n2);
 
         double restest = 0;
@@ -248,10 +248,10 @@ int testfuncc() {
         int n1, n2;
         double real, im;
 
-        fscanf(tsfile, "%d", n1);
+        fscanf(tsfile, "%d", &n1);
         double complex *a1 = readc(tsfile, n1);
 
-        fscanf(tsfile, "%d", n2);
+        fscanf(tsfile, "%d", &n2);
         double complex *a2 = readc(tsfile, n2);
 
         double complex restest;
