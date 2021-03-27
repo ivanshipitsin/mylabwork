@@ -18,7 +18,6 @@ double * read(FILE * f, int n) {
     if (!a) {
         return NULL;
     }
-
     for (int i = 0; i < n; i++) {
         if(!fscanf(f, "%lf", a + i)) {
             if(!a) {

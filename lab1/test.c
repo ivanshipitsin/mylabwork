@@ -219,7 +219,7 @@ int testfunc() {
 
         double restest = 0;
         fscanf(tsfile, "%lf", &restest);
-        
+
         LineFormR * v1 = newLineFormRn(a1, n1);
         double res = func(v1, a2, n2);
         if (res != restest) {
@@ -249,21 +249,12 @@ int testfuncc() {
         double real, im;
 
         fscanf(tsfile, "%d", n1);
-        double complex *a1 = (double *)calloc(n1, sizeof(double));
-        for (int j = 0; j < n1; j++){
-            fscanf(tsfile, "%lf", &real, &im);
-            __real__ (a1[j]) = real;
-            __imag__ (a1[j]) = im;
-        }
+        double complex *a1 = readc(tsfile, n1);
 
         fscanf(tsfile, "%d", n2);
-        double complex *a2 = (double complex*)calloc(n2, sizeof(double complex));
-        for (int j = 0; j < n2; j++){
-            fscanf(tsfile, "%lf", &real, &im);
-            __real__ (a2[j]) = real;
-            __imag__ (a2[j]) = im;
-        }
-        double complex restest = 0;
+        double complex *a2 = readc(tsfile, n2);
+
+        double complex restest;
         fscanf(tsfile, "%lf %lf", &real, &im);
         __real__ restest = real;
         __imag__ restest = im;
@@ -294,10 +285,10 @@ void test() {
     testcompc();
     testfunc();
     testfuncc();
-
+    /*
     testnewlineformr(); 
     testnewlineformc();
     testnewlineformrn();
-    testnewlineformcn();
+    testnewlineformcn();*/
 }
 

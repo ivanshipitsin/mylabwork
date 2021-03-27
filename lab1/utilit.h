@@ -4,7 +4,7 @@
 #include <complex.h>
 #include <stdlib.h>
 
-double complex * readc(FILE*, int);
+double complex * readc(FILE *, int);
 double * read(FILE *, int);
 
 #endif
