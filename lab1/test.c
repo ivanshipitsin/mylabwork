@@ -142,7 +142,7 @@ int testcomp() {
         LineFormR * v1 = newLineFormRn(a1, n1);
         LineFormR * v2 = newLineFormRn(a2, n1);
         comp(v1, scalr);
-        if (memcmp(v1->head, v2->head, n1)) {
+        if (memcmp(v1->head, v2->head, n1 * sizeof(double))) {
             fprintf(stdout ,"testcomp(): ERORR COMP in test: %d" , i);
             deletevector(v1);
             deletevector(v2);
@@ -184,7 +184,7 @@ int testcompc() {
         LineFormC * v1 = newLineFormCn(a1, n1);
         LineFormC * v2 = newLineFormCn(a2, n1);
         compc(v1, scalr);
-        if (memcmp(v1->head, v2->head, n1)) {
+        if (memcmp(v1->head, v2->head, n1 * sizeof(double complex))) {
             fprintf(stdout ,"testcompc(): ERORR COMPC in test: %d" , i);
             deletevector(v1);
             deletevector(v2);
