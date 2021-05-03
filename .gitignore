@@ -3,3 +3,4 @@ lab1/a.exe
 lab1/main
 *.exe
 *.stackdump
+*.json
