@@ -15,13 +15,13 @@ public:
     LinkedList(const LinkedList <T> & list);
     T GetFirst();
     T GetLast();
-    T Get(int);
+    T Get(int) const;
     LinkedList<T> * GetSubList(int,int);
-    int GetLenght();
-    void Append(T );
-    void Prepend(T );
-    void InsertAt(T , int);
-    void Set(int, T);
+    int GetLenght() const;
+    void Append(const T&);
+    void Prepend(const T& );
+    void InsertAt(const T& , int);
+    void Set(int,const T&);
     LinkedList<T>* Concat(LinkedList<T> *);
     ~LinkedList();
 protected:
@@ -67,7 +67,7 @@ LinkedList<T>::LinkedList(const LinkedList <T> & list){
 }
 
 template<class T>
-void LinkedList<T>::Append(T item){
+void LinkedList<T>::Append(const T& item){
     
     Item<T> * ptr = new Item<T>;
     ptr->data = item;
@@ -82,7 +82,7 @@ void LinkedList<T>::Append(T item){
 }
 
 template<class T>
-void LinkedList<T>::Prepend(T item){
+void LinkedList<T>::Prepend(const T& item){
     Item<T> * ptr = new Item<T>;
     ptr->data = item;
     ptr->next = head;
@@ -101,12 +101,12 @@ T LinkedList<T>::GetLast(){
 }
 
 template<class T>
-int LinkedList<T>::GetLenght(){
+int LinkedList<T>::GetLenght() const{
     return len;
 }
 
 template<class T>
-T LinkedList<T>::Get(int index){
+T LinkedList<T>::Get(int index) const{
     if(index >= len){
         throw "IndexOutOfRange";
     }
@@ -128,7 +128,7 @@ LinkedList<T>::~LinkedList(){
 }
 
 template<class T>
-void LinkedList<T>::InsertAt(T item, int count){
+void LinkedList<T>::InsertAt(const T& item, int count){
     if (count == 0) {
         Prepend(item);
         return;
@@ -194,7 +194,7 @@ LinkedList<T> * LinkedList<T>::GetSubList(int start,int end){
 }
 
 template<class T>
-void LinkedList<T>::Set(int ind, T item){
+void LinkedList<T>::Set(int ind,const T& item){
     if(ind < 0 or ind > GetLenght()){
         throw "IndexOutOfRange";
     }

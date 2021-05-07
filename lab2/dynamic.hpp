@@ -13,12 +13,12 @@ public:
     DynamicArray();
     DynamicArray(const DynamicArray<T> &);
     ~DynamicArray();
-    T Get(int);
-    int GetSize();
-    void Set(int,T);
+    T Get(int) const;
+    int GetSize() const;
+    void Set(int,const T&);
     void Resize(int);
-    void Prepend(T item);
-    void InsertAt(int, T);
+    void Prepend(const T& item);
+    void InsertAt(int, const T&);
     DynamicArray<T> * Concat(DynamicArray<T> *);
     DynamicArray<T> * Getsubarray(int, int);
 private:
@@ -72,7 +72,7 @@ DynamicArray<T>::DynamicArray(const DynamicArray<T> &arr){
 }
 
 template<class T>
-T DynamicArray<T>::Get(int ind){
+T DynamicArray<T>::Get(int ind) const{
     if(ind >= len){
         throw "IndexOutOfRange";
     }
@@ -80,12 +80,12 @@ T DynamicArray<T>::Get(int ind){
 }
 
 template<class T>
-int DynamicArray<T>::GetSize(){
+int DynamicArray<T>::GetSize() const{
     return len;
 }
 
 template<class T>
-void DynamicArray<T>::Set(int ind, T item) {
+void DynamicArray<T>::Set(int ind,const T& item) {
     if(ind >= len){
         throw "IndexOutOfRange";
     }
@@ -109,7 +109,7 @@ void DynamicArray<T>::Resize(int newSize) {
     len = newSize;
 }
 template<class T>
-void DynamicArray<T>::Prepend(T item) {
+void DynamicArray<T>::Prepend(const T& item) {
     if(GetSize() == 0) {
         Resize(1);
         mass[0] = item;
@@ -121,7 +121,7 @@ void DynamicArray<T>::Prepend(T item) {
 }
 
 template<class T>
-void DynamicArray<T>::InsertAt(int ind,T item) {
+void DynamicArray<T>::InsertAt(int ind,const T& item) {
     if(ind == GetSize()) {
         Resize(GetSize() + 1);
         Set(GetSize() - 1, item);

@@ -7,15 +7,15 @@
 template<class T>
 class Sequence {
 public:
-    virtual T GetFirst() = 0;
-    virtual T GetLast() = 0;
-    virtual T Get(int) = 0;
+    virtual T GetFirst() const = 0;
+    virtual T GetLast() const = 0;
+    virtual T Get(int) const = 0;
     virtual Sequence<T>* GetSubsequence(int,int) = 0;
-    virtual int GetLenght() = 0;
-    virtual void Append(T) = 0;
-    virtual void Prepend(T) = 0;
-    virtual void Set(int,T) = 0;
-    virtual void InsertAt(T, int) = 0;
+    virtual int GetLenght() const = 0;
+    virtual void Append(const T&) = 0;
+    virtual void Prepend(const T&) = 0;
+    virtual void Set(int,const T&) = 0;
+    virtual void InsertAt(const T&, int) = 0;
     virtual Sequence<T> * Concat(Sequence <T> *) = 0;
 };
 
@@ -27,15 +27,15 @@ public:
     ArraySequence(const ArraySequence<T> &);
     ArraySequence(int);
     //~ArraySequence();
-    T GetFirst();
-    T GetLast();
-    T Get(int);
-    void Set(int, T);
+    T GetFirst() const;
+    T GetLast() const;
+    T Get(int) const;
+    void Set(int,const T&);
     ArraySequence<T>* GetSubsequence(int,int);
-    int GetLenght();
-    void Append(T);
-    void Prepend(T);
-    void InsertAt(T, int);
+    int GetLenght() const;
+    void Append(const T&);
+    void Prepend(const T&);
+    void InsertAt(const T&, int);
     ArraySequence<T> * Concat(Sequence <T> *);
 
 private:
@@ -49,15 +49,15 @@ public:
     LinkedListSequence();
     LinkedListSequence(const LinkedListSequence<T> &);
     ~LinkedListSequence();
-    T GetFirst();
-    T GetLast();
-    T Get(int);
-    void Set(int, T);
+    T GetFirst() const;
+    T GetLast() const;
+    T Get(int) const;
+    void Set(int, const T&);
     LinkedListSequence<T>* GetSubsequence(int,int);
-    int GetLenght();
-    void Append(T);
-    void Prepend(T);
-    void InsertAt(T, int);
+    int GetLenght() const;
+    void Append(const T&);
+    void Prepend(const T&);
+    void InsertAt(const T&, int);
     LinkedListSequence<T> * Concat(Sequence <T> *);
 private:
     LinkedList<T> * mass;
@@ -86,27 +86,27 @@ LinkedListSequence<T>::~LinkedListSequence(){
 }
 
 template<class T>
-T LinkedListSequence<T>::GetFirst(){
+T LinkedListSequence<T>::GetFirst() const{
     return mass->GetFirst();
 }
 
 template<class T>
-T LinkedListSequence<T>::GetLast(){
+T LinkedListSequence<T>::GetLast() const{
     return mass->GetLast();
 }
 
 template<class T>
-T LinkedListSequence<T>::Get(int ind){
+T LinkedListSequence<T>::Get(int ind) const{
     return mass->Get(ind);
 }
 
 template<class T>
-void LinkedListSequence<T>::Set(int ind, T item){
+void LinkedListSequence<T>::Set(int ind,const T &item){
     mass->Set(ind, item);
 }
 
 template<class T>
-int LinkedListSequence<T>::GetLenght(){
+int LinkedListSequence<T>::GetLenght() const{
     return mass->GetLenght();
 }
 
@@ -118,17 +118,17 @@ LinkedListSequence<T> * LinkedListSequence<T>::GetSubsequence(int start,int stop
 }
 
 template<class T>
-void LinkedListSequence<T>::Append(T item){
+void LinkedListSequence<T>::Append(const T& item){
     mass->Append(item);
 }
 
 template<class T>
-void LinkedListSequence<T>::Prepend(T item){
+void LinkedListSequence<T>::Prepend(const T& item){
     mass->Prepend(item);
 }
 
 template<class T>
-void LinkedListSequence<T>::InsertAt(T item, int ind){
+void LinkedListSequence<T>::InsertAt(const T& item, int ind){
     mass->InsertAt(item, ind);
 }
 
@@ -169,27 +169,27 @@ ArraySequence<T>::~ArraySequence(){
 }*/
 
 template<class T>
-T ArraySequence<T>::GetFirst(){
+T ArraySequence<T>::GetFirst() const {
     return mass->Get(0);
 }
 
 template<class T>
-T ArraySequence<T>::GetLast(){
+T ArraySequence<T>::GetLast() const {
     return mass->Get(mass->GetSize() - 1);
 }
 
 template<class T>
-T ArraySequence<T>::Get(int ind){
+T ArraySequence<T>::Get(int ind) const{
     return mass->Get(ind);
 }
 
 template<class T>
-void ArraySequence<T>::Set(int ind, T item){
+void ArraySequence<T>::Set(int ind,const T& item){
     mass->Set(ind, item);
 }
 
 template<class T>
-int ArraySequence<T>::GetLenght(){
+int ArraySequence<T>::GetLenght() const{
     return mass->GetSize();
 }
 
@@ -201,18 +201,18 @@ ArraySequence<T> * ArraySequence<T>::GetSubsequence(int start,int stop){
 }
 
 template<class T>
-void ArraySequence<T>::Append(T item){
+void ArraySequence<T>::Append(const T& item){
     mass->Resize(mass->GetSize() + 1);
     mass->Set(mass->GetSize() - 1, item);
 }
 
 template<class T>
-void ArraySequence<T>::Prepend(T item){
+void ArraySequence<T>::Prepend(const T& item){
     mass->Prepend(item);
 }
 
 template<class T>
-void ArraySequence<T>::InsertAt(T item, int ind){
+void ArraySequence<T>::InsertAt(const T& item, int ind){
     mass->InsertAt(ind, item);
 }
 
