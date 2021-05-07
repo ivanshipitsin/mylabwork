@@ -21,6 +21,7 @@ public:
     void Append(T );
     void Prepend(T );
     void InsertAt(T , int);
+    void Set(int, T);
     LinkedList<T>* Concat(LinkedList<T> *);
     ~LinkedList();
 protected:
@@ -190,6 +191,18 @@ LinkedList<T> * LinkedList<T>::GetSubList(int start,int end){
     elem->len = end - start + 1;
 
     return elem; 
+}
+
+template<class T>
+void LinkedList<T>::Set(int ind, T item){
+    if(ind < 0 or ind > GetLenght()){
+        throw "IndexOutOfRange";
+    }
+    Item<T> * ptr = head;
+    for(int i = 0; i < ind; i++) {
+        ptr = ptr->next;
+    }
+    ptr->data = item;
 }
 
 #endif

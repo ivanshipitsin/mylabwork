@@ -38,7 +38,7 @@ DynamicArray<T>::DynamicArray(T* item,int count){
         mass = new T[count];
         len = count;
         cap = count;
-        memcpy(mass, item, count);
+        memcpy(mass, item, count*sizeof(T));
     }
 }
 
@@ -61,14 +61,14 @@ DynamicArray<T>::DynamicArray(int size){
 
 template<class T>
 DynamicArray<T>::~DynamicArray(){
-    delete[] (mass);
+    delete[] mass;
 }
 template<class T>
 DynamicArray<T>::DynamicArray(const DynamicArray<T> &arr){
     mass = new T[arr.cap];
     cap = arr.cap;
     len = arr.len;
-    memcpy(mass, arr.mass, len);
+    memcpy(mass, arr.mass, len * sizeof(T));
 }
 
 template<class T>

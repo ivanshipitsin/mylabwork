@@ -14,8 +14,9 @@ public:
     virtual int GetLenght() = 0;
     virtual void Append(T) = 0;
     virtual void Prepend(T) = 0;
+    virtual void Set(int,T) = 0;
     virtual void InsertAt(T, int) = 0;
-    //virtual Sequence<T> * Concat(Sequence <T> *) = 0;
+    virtual Sequence<T> * Concat(Sequence <T> *) = 0;
 };
 
 template <class T>
@@ -24,15 +25,18 @@ public:
     ArraySequence(T*,int);
     ArraySequence();
     ArraySequence(const ArraySequence<T> &);
+    ArraySequence(int);
+    //~ArraySequence();
     T GetFirst();
     T GetLast();
     T Get(int);
+    void Set(int, T);
     ArraySequence<T>* GetSubsequence(int,int);
     int GetLenght();
     void Append(T);
     void Prepend(T);
     void InsertAt(T, int);
-    ArraySequence<T> * Concat(ArraySequence <T> *);
+    ArraySequence<T> * Concat(Sequence <T> *);
 
 private:
     DynamicArray<T> *mass;
@@ -44,15 +48,17 @@ public:
     LinkedListSequence(T*,int);
     LinkedListSequence();
     LinkedListSequence(const LinkedListSequence<T> &);
+    ~LinkedListSequence();
     T GetFirst();
     T GetLast();
     T Get(int);
+    void Set(int, T);
     LinkedListSequence<T>* GetSubsequence(int,int);
     int GetLenght();
     void Append(T);
     void Prepend(T);
     void InsertAt(T, int);
-    LinkedListSequence<T> * Concat(LinkedListSequence <T> *);
+    LinkedListSequence<T> * Concat(Sequence <T> *);
 private:
     LinkedList<T> * mass;
 };
@@ -75,6 +81,11 @@ LinkedListSequence<T>::LinkedListSequence(const LinkedListSequence <T> & list){
 }
 
 template<class T>
+LinkedListSequence<T>::~LinkedListSequence(){
+    delete [] mass;
+}
+
+template<class T>
 T LinkedListSequence<T>::GetFirst(){
     return mass->GetFirst();
 }
@@ -87,6 +98,11 @@ T LinkedListSequence<T>::GetLast(){
 template<class T>
 T LinkedListSequence<T>::Get(int ind){
     return mass->Get(ind);
+}
+
+template<class T>
+void LinkedListSequence<T>::Set(int ind, T item){
+    mass->Set(ind, item);
 }
 
 template<class T>
@@ -117,8 +133,10 @@ void LinkedListSequence<T>::InsertAt(T item, int ind){
 }
 
 template<class T>
-LinkedListSequence<T> * LinkedListSequence<T>::Concat(LinkedListSequence <T> * list){
-    this->mass->Concat(list->mass);
+LinkedListSequence<T> * LinkedListSequence<T>::Concat(Sequence <T> * list){
+    for(int i = 0; i < list->GetLenght(); i++) {
+        Append(list->Get(i));
+    }
 
     return this;
 }
@@ -131,14 +149,24 @@ ArraySequence<T>::ArraySequence(T* item,int count){
 }
 
 template<class T>
+ArraySequence<T>::ArraySequence(int count){
+    mass = new DynamicArray<T>(count);
+}
+
+template<class T>
 ArraySequence<T>::ArraySequence(){
     mass = new DynamicArray<T>();
 }
 
 template<class T>
 ArraySequence<T>::ArraySequence(const ArraySequence <T> & list){
-    mass = new DynamicArray<T>(list.mass);
+    mass = new DynamicArray<T>(*(list.mass));
 }
+
+/*template<class T>
+ArraySequence<T>::~ArraySequence(){
+    delete mass;
+}*/
 
 template<class T>
 T ArraySequence<T>::GetFirst(){
@@ -153,6 +181,11 @@ T ArraySequence<T>::GetLast(){
 template<class T>
 T ArraySequence<T>::Get(int ind){
     return mass->Get(ind);
+}
+
+template<class T>
+void ArraySequence<T>::Set(int ind, T item){
+    mass->Set(ind, item);
 }
 
 template<class T>
@@ -180,12 +213,14 @@ void ArraySequence<T>::Prepend(T item){
 
 template<class T>
 void ArraySequence<T>::InsertAt(T item, int ind){
-    mass->InsertAt(item, ind);
+    mass->InsertAt(ind, item);
 }
 
 template<class T>
-ArraySequence<T> * ArraySequence<T>::Concat(ArraySequence <T> * list){
-    this->mass->Concat(list->mass);
+ArraySequence<T> * ArraySequence<T>::Concat(Sequence <T> * list){
+    for(int i = 0; i < list->GetLenght(); i++) {
+        Append(list->Get(i));
+    }
 
     return this;
 }
