@@ -26,7 +26,7 @@ public:
     ArraySequence();
     ArraySequence(const ArraySequence<T> &);
     ArraySequence(int);
-    //~ArraySequence();
+    ~ArraySequence();
     T GetFirst() const;
     T GetLast() const;
     T Get(int) const;
@@ -163,10 +163,12 @@ ArraySequence<T>::ArraySequence(const ArraySequence <T> & list){
     mass = new DynamicArray<T>(*(list.mass));
 }
 
-/*template<class T>
+template<class T>
 ArraySequence<T>::~ArraySequence(){
-    delete mass;
-}*/
+    if(mass){
+        delete mass;
+    }
+}
 
 template<class T>
 T ArraySequence<T>::GetFirst() const {

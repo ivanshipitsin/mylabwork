@@ -9,8 +9,8 @@ class Matrix {
         Matrix(T ** item, int n){
             mat = new ArraySequence<ArraySequence<T> *>(n);
             for(int i = 0; i < n; i++) {
-                    ArraySequence<T> * ptr = new ArraySequence<T>(item[i], n);
-                    mat->Set(i, ptr);
+                ArraySequence<T> * ptr = new ArraySequence<T>(item[i], n);
+                mat->Set(i, ptr);
             }
             dim = n;
         }
@@ -21,17 +21,17 @@ class Matrix {
         Matrix(int n){
             mat = new ArraySequence<ArraySequence<T> *>(n);
             for(int i = 0; i < n; i++) {
-                    ArraySequence<T> * ptr = new ArraySequence<T>(n);
-                    mat->Set(i, ptr);
+                ArraySequence<T> * ptr = new ArraySequence<T>(n);
+                mat->Set(i, ptr);
             }
             dim = n;
         }
         Matrix(const Matrix<T> & matr){
             mat = new ArraySequence<ArraySequence<T> *>(matr.GetDim());
             for(int i = 0; i < matr.GetDim(); i++) {
-                    ArraySequence<T> * ptr = new ArraySequence<T>();
-                    *ptr = *(matr.mat->Get(i));
-                    mat->Set(i, ptr);
+                ArraySequence<T> * ptr = new ArraySequence<T>();
+                *ptr = *(matr.mat->Get(i));
+                mat->Set(i, ptr);
             }
             dim = matr.GetDim();
         }
@@ -68,13 +68,17 @@ class Matrix {
         ~Matrix(){
             try{
                 for (int i = 0; i < dim; i++){
-                    delete mat->Get(i);
+                    if(mat->Get(i)){
+                        delete mat->Get(i);
+                    }
                 }
             }
             catch(std::string a){
                 std::cout << "Ohhh . " << a;
             }
-            delete mat;
+            if(mat){
+                delete mat;
+            }
         }
 
     private:
@@ -151,19 +155,16 @@ int main(int argc, char** argv) {
                 case 2:{
                         double ** temp;
                         int n = 0;
-                        std:: cout << "Enter dimention:\n";
+                        std::cout << "Enter dimention:\n";
                         std::cin >> n;
                         /*if(!scanf("%d", &n)) {
                             fprintf(stderr, "Error enter dimention\n");
                             break;
                         }*/
-                        std::cout << "Enter lineform:\n";
+                        std::cout << "Enter Matrix:\n";
                         temp = read<double>(std::cin, n);
-                        if(!temp) {
-                            fprintf(stderr, "Error enter lineform");
-                            break;
-                        }
-                        matdd.Append(Matrix<double>(temp, n));
+                        Matrix<double> newmatr(temp, n);
+                        matdd.Append(newmatr);
                         scanf("%*c");
                         clear<double>(temp, n);
                         break;
@@ -177,12 +178,8 @@ int main(int argc, char** argv) {
                             fprintf(stderr, "Error enter dimention\n");
                             break;
                         }*/
-                        std::cout << "Enter lineform:\n";
+                        std::cout << "Enter Matrix:\n";
                         temp = read<std::complex<double>>(std::cin, n);
-                        if(!temp) {
-                            fprintf(stderr, "Error enter lineform");
-                            break;
-                        }
                         Matrix<std::complex<double>> newmat(temp, n);
                         matcc.Append(newmat);
                         scanf("%*c");
@@ -276,9 +273,6 @@ int main(int argc, char** argv) {
                     printMatrixis<double>(matdd);
                     std::cout << "Complex Matrix :";
                     printMatrixis<std::complex<double>>(matcc);
-                    break;
-                default:
-                    printf("AAAAAA. zzzzzzzz\n");
                     break;
             }
         }
