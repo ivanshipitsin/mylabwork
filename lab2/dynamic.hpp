@@ -63,6 +63,7 @@ template<class T>
 DynamicArray<T>::~DynamicArray(){
     if(mass != nullptr){
         delete[] mass;
+        mass = nullptr;
     }
 }
 template<class T>
@@ -75,7 +76,7 @@ DynamicArray<T>::DynamicArray(const DynamicArray<T> &arr){
 
 template<class T>
 T DynamicArray<T>::Get(int ind) const{
-    if(ind >= len){
+    if(ind >= len || ind < 0){
         throw "IndexOutOfRange";
     }
     return mass[ind];
@@ -88,7 +89,7 @@ int DynamicArray<T>::GetSize() const{
 
 template<class T>
 void DynamicArray<T>::Set(int ind,const T& item) {
-    if(ind >= len){
+    if(ind >= len || ind < 0){
         throw "IndexOutOfRange";
     }
     mass[ind] = item;
@@ -127,7 +128,7 @@ void DynamicArray<T>::InsertAt(int ind,const T& item) {
     if(ind == GetSize()) {
         Resize(GetSize() + 1);
         Set(GetSize() - 1, item);
-    } else if (ind > GetSize()){
+    } else if (ind > GetSize() || ind < 0){
         throw "IndexOutOfRange";
     }else {
         Resize(GetSize() + 1);

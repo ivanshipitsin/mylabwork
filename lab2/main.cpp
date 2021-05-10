@@ -1,5 +1,4 @@
 #include <iostream>
-#include <complex>
 #include "sequence.hpp"
 #include <string>
 #include "matrix.hpp"
@@ -49,13 +48,12 @@ void clear(T** masivblackhole, int size){
 
 
 template<class T>
-void printMatrixis(ArraySequence<Matrix<T>>&);
+void printMatrixis(const ArraySequence<Matrix<T>>&);
 
-int main(int argc, char** argv) {
+int main() {
     ArraySequence<Matrix<double>> matdd;
     ArraySequence<Matrix<std::complex<double>>> matcc;
-    bool turn = true;  
-    if (argc < 2) {
+    bool turn = true;
         while(turn) {
             int ch = getmenu();
             switch (ch) {
@@ -147,35 +145,34 @@ int main(int argc, char** argv) {
                     scanf("%*c");
                     break;
                 }
-                case 6:{/*
-                        printf("Man: FUNC(NUM, ARGV) =: res = NUM(ARGV)\n");
-                        printf("Enter NUM:");
+                case 6:{
+                        std::cout << "For complex(1) or real(2)?\n";
+                        int real = 1;
+                        std::cin >> real;
+                        std::cout << "Man: NORM(NUM) =: res = NUM(ARGV)\n";
+                        std::cout << "Enter NUM:";
                         int num = 0;
-                        scanf("%d", &num);
-                        if (num > count || num < 1) {
-                            fprintf(stderr, "ERROR, vector don\'t found\n");
-                            scanf("%*c");
-                            break;
-                        }
-                        int mun = 0;
-                        printf("Enter amount arguments :");
-                        scanf("%d", &mun);
-                        if (a[num - 1] -> size < sizeof(double complex)) {
+                        std::cin >> num;
+                        if(real == 2){
                             double res = 0;
-                            printf("Enter arguments:\n");
-                            double * p = read(stdin, mun);
-                            res = func(a[num - 1], p, mun);
-                            printf("%lf", res);
-                            free(p);
-                        } else {
-                            double complex res;
-                            printf("Enter arguments (in pair):\n");
-                            double complex * p = readc(stdin, mun);
-                            res = funcc(a[num - 1], p, mun);
-                            printf("%lf + %lf*I", __real__ res, __imag__ res);
-                            free(p);
+                            try{
+                                res = matdd.Get(num - 1).norm();
+                            } catch(const char* s){
+                                std::cerr << s << std::endl;
+                                break;
+                            }
+                            std::cout << "Result:" << res << std::endl;
+                        } else if(real == 1){
+                            std::complex<double> res;
+                            try{
+                                res = matcc.Get(num - 1).norm();
+                            } catch(const char * s){
+                                std::cerr << s << std::endl;
+                                break;
+                            }
+                            std::cout << "Result:" << res << std::endl;
                         }
-                        scanf("%*c");*/
+                        scanf("%*c");
                         break;
                     }
                 case 7:
@@ -186,11 +183,7 @@ int main(int argc, char** argv) {
                     break;
             }
         }
-    } else {
-        /*if (!strcmp(argv[1], "test")) {
-            test();
-        }*/
-    }
+    
 
     /*int ** masivblackhole = new int *[4];
     for(int i = 0; i < 4; i++){
@@ -222,12 +215,13 @@ int main(int argc, char** argv) {
 
 
 template<class T>
-void printMatrixis(ArraySequence<Matrix<T>> & data) {
+void printMatrixis(const ArraySequence<Matrix<T>> & data) {
     for(int i = 0; i < data.GetLenght(); i++){
         std::cout << std::endl;
-        for(int j = 0 ; j < data.Get(i).GetDim(); j++) {
-            for(int k = 0; k < data.Get(i).GetDim(); k++){
-                std::cout << data.Get(i).Get(i,j) << " ";
+        Matrix<T> item = data.Get(i); // maybe error
+        for(int j = 0 ; j < item.GetDim(); j++) {
+            for(int k = 0; k < item.GetDim(); k++){
+                std::cout << item.Get(j,k) << " ";
             }
             std::cout << std::endl;
         }
