@@ -61,7 +61,9 @@ DynamicArray<T>::DynamicArray(int size){
 
 template<class T>
 DynamicArray<T>::~DynamicArray(){
-    delete[] mass;
+    if(mass != nullptr){
+        delete[] mass;
+    }
 }
 template<class T>
 DynamicArray<T>::DynamicArray(const DynamicArray<T> &arr){
