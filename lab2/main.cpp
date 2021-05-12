@@ -154,25 +154,24 @@ int main() {
                         std::cout << "Enter NUM:";
                         int num = 0;
                         std::cin >> num;
+                        double res = 0;
                         if(real == 2){
-                            double res = 0;
                             try{
                                 res = matdd.Get(num - 1).norm();
                             } catch(const char* s){
                                 std::cerr << s << std::endl;
                                 break;
                             }
-                            std::cout << "Result:" << res << std::endl;
                         } else if(real == 1){
-                            std::complex<double> res;
                             try{
                                 res = matcc.Get(num - 1).norm();
                             } catch(const char * s){
                                 std::cerr << s << std::endl;
                                 break;
                             }
-                            std::cout << "Result:" << res << std::endl;
+                            
                         }
+                        std::cout << "Result:" << res << std::endl;
                         scanf("%*c");
                         break;
                     }
@@ -219,10 +218,20 @@ template<class T>
 void printMatrixis(const ArraySequence<Matrix<T>> & data) {
     for(int i = 0; i < data.GetLenght(); i++){
         std::cout << std::endl;
-        Matrix<T> item = data.Get(i); // maybe error
+        Matrix<T> item;
+        try{
+            item = data.Get(i); // maybe error
+        }catch(char const * s) {
+            std::cerr << s << " " << i  << "in printMatrix : item = data.Get(i)"<< data.GetLenght() <<std::endl;
+        }
+        std::cout << "Number:" << i << std::endl;
         for(int j = 0 ; j < item.GetDim(); j++) {
             for(int k = 0; k < item.GetDim(); k++){
-                std::cout << item.Get(j,k) << " ";
+                try{
+                    std::cout << item.Get(j,k) << " ";
+                }catch( char const* s){
+                    std::cerr << s << std::endl;
+                }
             }
             std::cout << std::endl;
         }

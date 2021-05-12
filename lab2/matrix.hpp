@@ -7,30 +7,30 @@ template<class T>
 class Matrix {
     public:
         Matrix(T ** item, int n){
-            mat = new ArraySequence<ArraySequence<T> *>(n);
+            mat = new DynamicArray<DynamicArray<T> *>(n);
             for(int i = 0; i < n; i++) {
-                ArraySequence<T> *ptr = new ArraySequence<T>(item[i], n);
+                DynamicArray<T> *ptr = new DynamicArray<T>(item[i], n);
                 mat->Set(i, ptr);
             }
             dim = n;
         }
         Matrix() {
-            mat = new ArraySequence<ArraySequence<T> *>();
+            mat = new DynamicArray<DynamicArray<T> *>();
             dim = 0;
         }
         Matrix(int n){
-            mat = new ArraySequence<ArraySequence<T> *>(n);
+            mat = new DynamicArray<DynamicArray<T> *>(n);
             for(int i = 0; i < n; i++) {
-                ArraySequence<T> *ptr = new ArraySequence<T>(n);
+                DynamicArray<T> *ptr = new DynamicArray<T>(n);
                 mat->Set(i, ptr);
             }
             dim = n;
         }
         Matrix(const Matrix<T> & matr){
             dim = matr.GetDim();
-            mat = new ArraySequence<ArraySequence<T> *>(dim);
+            mat = new DynamicArray<DynamicArray<T> *>(dim);
             for(int i = 0; i < dim; i++) {
-                ArraySequence<T>  *ptr =new ArraySequence<T> (*(matr.mat->Get(i)));
+                DynamicArray<T>  *ptr =new DynamicArray<T> (*(matr.mat->Get(i)));
                 mat->Set(i, ptr);
             }
         }
@@ -77,9 +77,12 @@ class Matrix {
             }
             return p;
         }
+        ~Matrix() {
+            delete mat;
+        }
     private:
         int dim;
-        ArraySequence<ArraySequence<T> *> *mat;
+        DynamicArray<DynamicArray<T> *> *mat;
 };
 template<class T>
 const Matrix<T> operator + (const Matrix<T>& left, const Matrix<T>& right) {

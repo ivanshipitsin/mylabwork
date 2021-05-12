@@ -12,7 +12,7 @@ public:
     virtual T Get(int) const = 0;
     virtual Sequence<T>* GetSubsequence(int,int) = 0;
     virtual int GetLenght() const = 0;
-    virtual void Append(T) = 0;
+    virtual void Append(const T&) = 0;
     virtual void Prepend(T) = 0;
     virtual void Set(int,T) = 0;
     virtual void InsertAt( T, int) = 0;
@@ -33,7 +33,7 @@ public:
     void Set(int,T);
     ArraySequence<T>* GetSubsequence(int,int);
     int GetLenght() const;
-    void Append(T);
+    void Append(const T&);
     void Prepend(T);
     void InsertAt(T, int);
     ArraySequence<T> * Concat(Sequence <T> *);
@@ -55,7 +55,7 @@ public:
     void Set(int,T);
     LinkedListSequence<T>* GetSubsequence(int,int);
     int GetLenght() const;
-    void Append(T);
+    void Append(const T&);
     void Prepend(T);
     void InsertAt(T, int);
     LinkedListSequence<T> * Concat(Sequence <T> *);
@@ -118,7 +118,7 @@ LinkedListSequence<T> * LinkedListSequence<T>::GetSubsequence(int start,int stop
 }
 
 template<class T>
-void LinkedListSequence<T>::Append(T item){
+void LinkedListSequence<T>::Append(const T& item){
     mass->Append(item);
 }
 
@@ -201,7 +201,7 @@ ArraySequence<T> * ArraySequence<T>::GetSubsequence(int start,int stop){
 }
 
 template<class T>
-void ArraySequence<T>::Append(T item){
+void ArraySequence<T>::Append(const T& item){
     mass->Resize(mass->GetSize() + 1);
     mass->Set(mass->GetSize() - 1, item);
 }
