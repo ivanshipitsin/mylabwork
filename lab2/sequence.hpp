@@ -74,7 +74,7 @@ LinkedListSequence<T>::LinkedListSequence(){
 }
 
 template<class T>
-LinkedListSequence<T>::LinkedListSequence(const LinkedListSequence <T> & list){
+LinkedListSequence<T>::LinkedListSequence(const LinkedListSequence <T> & list) {
     mass = LinkedList<T>(list.mass);
 }
 
@@ -154,7 +154,7 @@ ArraySequence<T>::ArraySequence(){
 
 template<class T>
 ArraySequence<T>::ArraySequence(const ArraySequence <T> & list){
-    mass = DynamicArray<T>(list.mass);
+    mass = list.mass;
 }
 
 
