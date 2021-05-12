@@ -61,14 +61,12 @@ DynamicArray<T>::DynamicArray(int size){
 
 template<class T>
 DynamicArray<T>::~DynamicArray(){
-<<<<<<< HEAD
+
     if(mass != nullptr){
         delete[] mass;
         mass = nullptr;
     }
-=======
-    delete[] mass;
->>>>>>> parent of a500899 (AAAAHELP)
+
 }
 template<class T>
 DynamicArray<T>::DynamicArray(const DynamicArray<T> &arr){

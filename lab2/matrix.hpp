@@ -7,43 +7,41 @@ template<class T>
 class Matrix {
     public:
         Matrix(T ** item, int n){
-            mat = ArraySequence<ArraySequence<T> >(n);
+            mat = new ArraySequence<ArraySequence<T> *>(n);
             for(int i = 0; i < n; i++) {
-                ArraySequence<T> ptr(item[i], n);
-                mat.Set(i, ptr);
+                ArraySequence<T> *ptr = new ArraySequence<T>(item[i], n);
+                mat->Set(i, ptr);
             }
             dim = n;
         }
         Matrix() {
-            mat = ArraySequence<ArraySequence<T> >();
+            mat = new ArraySequence<ArraySequence<T> *>();
             dim = 0;
         }
         Matrix(int n){
-            mat = ArraySequence<ArraySequence<T> >(n);
+            mat = new ArraySequence<ArraySequence<T> *>(n);
             for(int i = 0; i < n; i++) {
-                ArraySequence<T> ptr(n);
-                mat.Set(i, ptr);
+                ArraySequence<T> *ptr = new ArraySequence<T>(n);
+                mat->Set(i, ptr);
             }
             dim = n;
         }
         Matrix(const Matrix<T> & matr){
-            mat = ArraySequence<ArraySequence<T> >(matr.GetDim());
-            for(int i = 0; i < matr.GetDim(); i++) {
-                ArraySequence<T>  ptr = (matr.mat.Get(i));
-                mat.Set(i, ptr);
-            }
             dim = matr.GetDim();
+            mat = new ArraySequence<ArraySequence<T> *>(dim);
+            for(int i = 0; i < dim; i++) {
+                ArraySequence<T>  *ptr =new ArraySequence<T> (*(matr.mat->Get(i)));
+                mat->Set(i, ptr);
+            }
         }
         int GetDim() const{
             return dim;
         }
         T Get(int i, int j) const{
-            return mat.Get(i).Get(j);
+            return mat->Get(i)->Get(j);
         }
         void Set(int i, int j,const T& item){
-            ArraySequence< T > ptr = mat.Get(i);
-            ptr.Set(j, item);
-            mat.Set(i,ptr);
+            mat->Get(i)->Set(j, item);
         }
         Matrix<T> * Sum(const Matrix<T>& a) const{
             if(a.GetDim() != dim) {
@@ -81,7 +79,7 @@ class Matrix {
         }
     private:
         int dim;
-        ArraySequence<ArraySequence<T> > mat;
+        ArraySequence<ArraySequence<T> *> *mat;
 };
 template<class T>
 const Matrix<T> operator + (const Matrix<T>& left, const Matrix<T>& right) {

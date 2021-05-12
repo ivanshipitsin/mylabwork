@@ -26,6 +26,7 @@ public:
     ArraySequence();
     ArraySequence(const ArraySequence<T> &);
     ArraySequence(int);
+    ~ArraySequence();
     T GetFirst() const;
     T GetLast() const;
     T Get(int) const;
@@ -38,7 +39,7 @@ public:
     ArraySequence<T> * Concat(Sequence <T> *);
 
 private:
-    DynamicArray<T> mass;
+    DynamicArray<T>* mass;
 };
 
 template <class T>
@@ -47,6 +48,7 @@ public:
     LinkedListSequence(T*,int);
     LinkedListSequence();
     LinkedListSequence(const LinkedListSequence<T> &);
+    ~LinkedListSequence();
     T GetFirst() const;
     T GetLast() const;
     T Get(int) const;
@@ -58,72 +60,76 @@ public:
     void InsertAt(T, int);
     LinkedListSequence<T> * Concat(Sequence <T> *);
 private:
-    LinkedList<T>  mass;
+    LinkedList<T>*  mass;
 };
 
 
 
 template<class T>
 LinkedListSequence<T>::LinkedListSequence(T* item,int count){
-    mass = LinkedList<T>(item, count);
+    mass = new LinkedList<T>(item, count);
 }
 
 template<class T>
 LinkedListSequence<T>::LinkedListSequence(){
-    mass = LinkedList<T>();
+    mass = new LinkedList<T>();
 }
 
 template<class T>
 LinkedListSequence<T>::LinkedListSequence(const LinkedListSequence <T> & list) {
-    mass = LinkedList<T>(list.mass);
+    mass = new LinkedList<T>(*(list.mass));
 }
 
+template<class T>
+LinkedListSequence<T>::~LinkedListSequence(){
+    delete mass;
+}
 
 template<class T>
 T LinkedListSequence<T>::GetFirst() const{
-    return mass.GetFirst();
+    return mass->GetFirst();
 }
 
 template<class T>
 T LinkedListSequence<T>::GetLast() const{
-    return mass.GetLast();
+    return mass->GetLast();
 }
 
 template<class T>
 T LinkedListSequence<T>::Get(int ind) const{
-    return (mass.Get(ind));
+    return (mass->Get(ind));
 }
 
 template<class T>
 void LinkedListSequence<T>::Set(int ind, T item){
-    mass.Set(ind, item);
+    mass->Set(ind, item);
 }
 
 template<class T>
 int LinkedListSequence<T>::GetLenght() const{
-    return mass.GetLenght();
+    return mass->GetLenght();
 }
 
 template<class T>
 LinkedListSequence<T> * LinkedListSequence<T>::GetSubsequence(int start,int stop){
     LinkedListSequence<T> * newlist = new LinkedListSequence();
-    newlist.mass = mass.GetSubList(start, stop);
+    newlist->mass = mass->GetSubList(start, stop);
     return newlist;
 }
 
 template<class T>
 void LinkedListSequence<T>::Append(T item){
-    mass.Append(item);
+    mass->Append(item);
 }
 
 template<class T>
 void LinkedListSequence<T>::Prepend(T item){
-    mass.Prepend(item);
+    mass->Prepend(item);
 }
 
 template<class T>
 void LinkedListSequence<T>::InsertAt( T item, int ind){
-    mass.InsertAt(item, ind);
+    mass->InsertAt(item, ind);
 }
 
 template<class T>
@@ -139,71 +145,75 @@ LinkedListSequence<T> * LinkedListSequence<T>::Concat(Sequence <T> * list){
 /// ArraySequence
 template<class T>
 ArraySequence<T>::ArraySequence(T* item,int count){
-    mass = DynamicArray<T>(item, count);
+    mass = new DynamicArray<T>(item, count);
 }
 
 template<class T>
 ArraySequence<T>::ArraySequence(int count){
-    mass = DynamicArray<T>(count);
+    mass = new DynamicArray<T>(count);
 }
 
 template<class T>
 ArraySequence<T>::ArraySequence(){
-    mass = DynamicArray<T>();
+    mass = new DynamicArray<T>();
 }
 
 template<class T>
 ArraySequence<T>::ArraySequence(const ArraySequence <T> & list){
-    mass = list.mass;
+    mass = new DynamicArray<T>(*(list.mass));
 }
 
+template<class T>
+ArraySequence<T>::~ArraySequence(){
+    delete mass;
+}
 
 template<class T>
 T ArraySequence<T>::GetFirst() const {
-    return mass.Get(0);
+    return mass->Get(0);
 }
 
 template<class T>
 T ArraySequence<T>::GetLast() const {
-    return mass.Get(mass.GetSize() - 1);
+    return mass->Get(mass->GetSize() - 1);
 }
 
 template<class T>
 T ArraySequence<T>::Get(int ind) const{
-    return (mass.Get(ind));
+    return (mass->Get(ind));
 }
 
 template<class T>
 void ArraySequence<T>::Set(int ind, T item){
-    mass.Set(ind, item);
+    mass->Set(ind, item);
 }
 
 template<class T>
 int ArraySequence<T>::GetLenght() const{
-    return mass.GetSize();
+    return mass->GetSize();
 }
 
 template<class T>
 ArraySequence<T> * ArraySequence<T>::GetSubsequence(int start,int stop){
     ArraySequence<T> * newlist = new ArraySequence<T>();
-    newlist->mass = *(mass.Getsubarray(start, stop));
+    newlist->mass = (mass->Getsubarray(start, stop));
     return newlist;
 }
 
 template<class T>
 void ArraySequence<T>::Append(T item){
-    mass.Resize(mass.GetSize() + 1);
-    mass.Set(mass.GetSize() - 1, item);
+    mass->Resize(mass->GetSize() + 1);
+    mass->Set(mass->GetSize() - 1, item);
 }
 
 template<class T>
 void ArraySequence<T>::Prepend(T item){
-    mass.Prepend(item);
+    mass->Prepend(item);
 }
 
 template<class T>
 void ArraySequence<T>::InsertAt(T item, int ind){
-    mass.InsertAt(ind, item);
+    mass->InsertAt(ind, item);
 }
 
 template<class T>
