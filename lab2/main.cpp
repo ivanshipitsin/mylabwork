@@ -3,6 +3,7 @@
 #include <string>
 #include "matrix.hpp"
 #include <complex>
+#include "unit.hpp"
 
 const std::string MSG[] = {"1.EXIT", "2.Enter matrix (in real)", "3. Enter matrix (in complex)", "4. SUM (NUM1, NUM2)", "5. Scalar (NUM, SCLAR)" , "6. NORM (NUM)" , "7. List Matrix" };
 const int SMSG = 7;
@@ -22,29 +23,6 @@ int getmenu() {
     } while(ch < 1 || ch > SMSG);
 
     return ch;
-}
-
-template<class T>
-T ** read(std::istream & in, int size){
-    T ** res = new T*[size];
-    for(int i = 0; i < size; i++){
-        res[i] = new T[size];
-    }
-
-    for(int i = 0; i < size; i++) {
-        for(int j = 0; j < size; j++) {
-            std::cin >> res[i][j];
-        }
-    }
-    return res;
-}
-
-template<class T>
-void clear(T** masivblackhole, int size){
-    for(int i=0; i<size;i++){
-        delete [] masivblackhole[i];
-    }
-    delete [] masivblackhole;
 }
 
 

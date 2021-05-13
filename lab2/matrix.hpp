@@ -7,30 +7,30 @@ template<class T>
 class Matrix {
     public:
         Matrix(T ** item, int n){
-            mat = new DynamicArray<DynamicArray<T> *>(n);
+            mat = new ArraySequence<ArraySequence<T> *>(n);
             for(int i = 0; i < n; i++) {
-                DynamicArray<T> *ptr = new DynamicArray<T>(item[i], n);
+                ArraySequence<T> *ptr = new ArraySequence<T>(item[i], n);
                 mat->Set(i, ptr);
             }
             dim = n;
         }
         Matrix() {
-            mat = new DynamicArray<DynamicArray<T> *>();
+            mat = new ArraySequence<ArraySequence<T> *>();
             dim = 0;
         }
         Matrix(int n){
-            mat = new DynamicArray<DynamicArray<T> *>(n);
+            mat = new ArraySequence<ArraySequence<T> *>(n);
             for(int i = 0; i < n; i++) {
-                DynamicArray<T> *ptr = new DynamicArray<T>(n);
+                ArraySequence<T> *ptr = new ArraySequence<T>(n);
                 mat->Set(i, ptr);
             }
             dim = n;
         }
         Matrix(const Matrix<T> & matr){
             dim = matr.GetDim();
-            mat = new DynamicArray<DynamicArray<T> *>(dim);
+            mat = new ArraySequence<ArraySequence<T> *>(dim);
             for(int i = 0; i < dim; i++) {
-                DynamicArray<T>  *ptr =new DynamicArray<T> (*(matr.mat->Get(i)));
+                ArraySequence<T>  *ptr =new ArraySequence<T> (*(matr.mat->Get(i)));
                 mat->Set(i, ptr);
             }
         }
@@ -67,7 +67,7 @@ class Matrix {
         double norm() const{
             double p;
             for(int i = 0; i < dim; i++){
-                double sum;
+                double sum = 0;
                 for(int j = 0; j < dim; j++){
                     sum += std::abs(Get(j,i));
                 }
@@ -78,11 +78,15 @@ class Matrix {
             return p;
         }
         ~Matrix() {
+            dim = mat->GetLenght();
+            for(int i = 0; i < dim; i++){
+                delete mat->Get(i);
+            }
             delete mat;
         }
     private:
         int dim;
-        DynamicArray<DynamicArray<T> *> *mat;
+        ArraySequence<ArraySequence<T> *> *mat;
 };
 template<class T>
 const Matrix<T> operator + (const Matrix<T>& left, const Matrix<T>& right) {

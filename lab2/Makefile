@@ -7,3 +7,7 @@ clear:
 
 debug:
 	g++ -g -o main main.cpp
+	g++ -g -o bench bench.cpp
+
+bench:
+	g++ -o bench bench.cpp
