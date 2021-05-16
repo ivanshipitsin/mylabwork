@@ -83,6 +83,11 @@ LinkedListSequence<T>::LinkedListSequence(const LinkedListSequence <T> & list) {
 template<class T>
 LinkedListSequence<T>::~LinkedListSequence(){
     delete mass;
+
+    #ifdef DEBUG 
+        std::cerr << "Destroy Object type LinkedListSequence<T>" << mass << std::endl;
+    #endif
+
 }
 
 template<class T>
@@ -165,6 +170,11 @@ ArraySequence<T>::ArraySequence(const ArraySequence <T> & list){
 
 template<class T>
 ArraySequence<T>::~ArraySequence(){
+
+    #ifdef DEBUG 
+        std::cerr << "Destroy Object type ArraySequence<T>" << mass << std::endl;
+    #endif
+
     delete mass;
 }
 

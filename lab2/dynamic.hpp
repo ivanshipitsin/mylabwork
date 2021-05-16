@@ -61,7 +61,9 @@ DynamicArray<T>::DynamicArray(int size){
 
 template<class T>
 DynamicArray<T>::~DynamicArray(){
-
+    #ifdef DEBUG 
+        std::cerr << "Destroy Object type DynamicArray<T>" << mass << " " << len << " " << cap << std::endl;
+    #endif
     if(mass != nullptr){
         delete[] mass;
         mass = nullptr;

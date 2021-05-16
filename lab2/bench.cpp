@@ -1,3 +1,5 @@
+#define DEBUG
+
 #include <iostream>
 #include "list.hpp"
 #include "dynamic.hpp"
@@ -80,7 +82,7 @@ int errortestcode(){
     std::cout << "Enter dimention:\n";
     std::cin >> n;
     std::cout << "Enter Matrix:\n";
-    temp = read<double>(std::cin, n);
+    temp = read<double>(std::cin, n); 
     Matrix<double> newmatr(temp, n);
     matdd.Append(newmatr);
     scanf("%*c");

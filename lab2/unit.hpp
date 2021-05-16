@@ -21,6 +21,11 @@ T ** read(std::istream & in, int size){
 
 template<class T>
 void clear(T** masivblackhole, int size){
+    #ifdef DEBUG 
+        std::cerr << "Destroy Object type T**" << mass << " " << size <<std::endl;
+    #endif
+
+
     for(int i=0; i<size;i++){
         delete [] masivblackhole[i];
     }

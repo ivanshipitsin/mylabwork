@@ -119,12 +119,18 @@ T LinkedList<T>::Get(int index) const{
 
 template <class T>
 LinkedList<T>::~LinkedList(){
+    #ifdef DEBUG 
+        std::cerr << "Destroy Object type LinkedList<T>" << std::endl;
+    #endif
+
+
     Item<T> * ptr = head;
     while(ptr) {
         Item<T> * prev_ptr = ptr;
         ptr = ptr->next;
         delete (prev_ptr);
     } 
+
 }
 
 template<class T>

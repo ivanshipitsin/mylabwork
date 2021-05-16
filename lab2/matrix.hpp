@@ -78,11 +78,14 @@ class Matrix {
             return p;
         }
         ~Matrix() {
-            dim = mat->GetLenght();
-            for(int i = 0; i < dim; i++){
-                delete mat->Get(i);
+            if(mat){
+                dim = mat->GetLenght();
+                for(int i = 0; i < dim; i++){
+                    if(mat->Get(i))
+                        delete mat->Get(i);
+                }
+                delete mat;
             }
-            delete mat;
         }
     private:
         int dim;
