@@ -15,10 +15,10 @@ public:
     ~DynamicArray();
     T Get(int) const;
     int GetSize() const;
-    void Set(int,const T&);
+    void Set(int,T);
     void Resize(int);
-    void Prepend(const T& item);
-    void InsertAt(int, const T&);
+    void Prepend(T item);
+    void InsertAt(int,T);
     DynamicArray<T> * Concat(DynamicArray<T> *);
     DynamicArray<T> * Getsubarray(int, int);
 private:
@@ -40,6 +40,11 @@ DynamicArray<T>::DynamicArray(T* item,int count){
         cap = count;
         memcpy(mass, item, count*sizeof(T));
     }
+
+    #ifdef DEBUG 
+        std::cerr << "Generate Object type DynamicArray<T> with constructor (T**, size)" << mass << " " << len << " " << cap << std::endl;
+        std::cerr << "Type of T" << typeid(mass[0]).name() << std::endl;
+    #endif
 }
 
 template<class T>
@@ -47,6 +52,13 @@ DynamicArray<T>::DynamicArray(){
     mass = nullptr;
     len = 0;
     cap = 0;
+
+    #ifdef DEBUG 
+        std::cerr << "Generate Object type DynamicArray<T> with constructor ()" << mass << " " << len << " " << cap << std::endl;
+        T x;
+        std::cerr << "Type of T" << typeid(x).name() << std::endl;
+        x.~T();
+    #endif
 }
 
 template<class T>
@@ -57,14 +69,22 @@ DynamicArray<T>::DynamicArray(int size){
     mass = new T[size];
     len = size;
     cap = size;
+
+    #ifdef DEBUG 
+        std::cerr << "Generate Object type DynamicArray<T> with constructor (size)" << mass << " " << len << " " << cap << std::endl;
+        std::cerr << "Type of T" << typeid(mass[0]).name() <<std::endl;
+    #endif
 }
 
 template<class T>
 DynamicArray<T>::~DynamicArray(){
-    #ifdef DEBUG 
-        std::cerr << "Destroy Object type DynamicArray<T>" << mass << " " << len << " " << cap << std::endl;
-    #endif
     if(mass != nullptr){
+
+        #ifdef DEBUG 
+            std::cerr << "Destroy Object type DynamicArray<T>" << mass << " " << len << " " << cap << std::endl;
+            std::cerr << "Type of T" << typeid(mass[0]).name() << std::endl;
+        #endif
+
         delete[] mass;
         mass = nullptr;
     }
@@ -76,6 +96,11 @@ DynamicArray<T>::DynamicArray(const DynamicArray<T> &arr){
     cap = arr.cap;
     len = arr.len;
     memcpy(mass, arr.mass, len * sizeof(T));
+
+    #ifdef DEBUG 
+        std::cerr << "Generate copy Object type DynamicArray<T>" << arr.mass << " " << mass << " " << len << " " << cap << std::endl;
+        std::cerr << "Type of T" << typeid(mass[0]).name() <<std::endl;
+    #endif
 }
 
 template<class T>
@@ -92,7 +117,7 @@ int DynamicArray<T>::GetSize() const{
 }
 
 template<class T>
-void DynamicArray<T>::Set(int ind,const T& item) {
+void DynamicArray<T>::Set(int ind, T item) {
     if(ind >= len || ind < 0){
         throw "IndexOutOfRange";
     }
@@ -116,7 +141,7 @@ void DynamicArray<T>::Resize(int newSize) {
     len = newSize;
 }
 template<class T>
-void DynamicArray<T>::Prepend(const T& item) {
+void DynamicArray<T>::Prepend(T item) {
     if(GetSize() == 0) {
         Resize(1);
         mass[0] = item;
@@ -128,7 +153,7 @@ void DynamicArray<T>::Prepend(const T& item) {
 }
 
 template<class T>
-void DynamicArray<T>::InsertAt(int ind,const T& item) {
+void DynamicArray<T>::InsertAt(int ind,T item) {
     if(ind == GetSize()) {
         Resize(GetSize() + 1);
         Set(GetSize() - 1, item);

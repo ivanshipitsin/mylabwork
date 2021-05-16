@@ -5,6 +5,10 @@ template<class T>
 struct Item {
     T data;
     struct Item * next;
+    Item(const T& pdata,struct Item* pNext = nullptr){
+        data = pdata;
+        next = pNext;
+    }
 };
 
 template <class T>
@@ -19,9 +23,9 @@ public:
     LinkedList<T> * GetSubList(int,int);
     int GetLenght() const;
     void Append(const T&);
-    void Prepend(const T& );
-    void InsertAt(const T& , int);
-    void Set(int,const T&);
+    void Prepend(T );
+    void InsertAt(T , int);
+    void Set(int,T);
     LinkedList<T>* Concat(LinkedList<T> *);
     ~LinkedList();
 protected:
@@ -43,12 +47,10 @@ LinkedList<T>::LinkedList(){
 
 template<class T>
 LinkedList<T>::LinkedList(T* item, int count){
-    head = new Item<T>;
-    head->data = item[0];
+    head = new Item<T>(item[0]);
     Item<T> * prev_ptr = this->head;
     for (int i = 1; i < count; i++){
-        Item<T> * ptr = new Item<T>;
-        ptr->data = item[i];
+        Item<T> * ptr = new Item<T>(item[i]);
         prev_ptr->next = ptr;
         prev_ptr = ptr;
     }
@@ -69,9 +71,7 @@ LinkedList<T>::LinkedList(const LinkedList <T> & list){
 template<class T>
 void LinkedList<T>::Append(const T& item){
     
-    Item<T> * ptr = new Item<T>;
-    ptr->data = item;
-    ptr->next = nullptr;
+    Item<T> * ptr = new Item<T>(item);
     if(len == 0) {
         head = ptr;
         tail = ptr;
@@ -82,10 +82,8 @@ void LinkedList<T>::Append(const T& item){
 }
 
 template<class T>
-void LinkedList<T>::Prepend(const T& item){
-    Item<T> * ptr = new Item<T>;
-    ptr->data = item;
-    ptr->next = head;
+void LinkedList<T>::Prepend(T item){
+    Item<T> * ptr = new Item<T>(item, head);
     head = ptr;
     len++;
 }
@@ -134,7 +132,7 @@ LinkedList<T>::~LinkedList(){
 }
 
 template<class T>
-void LinkedList<T>::InsertAt(const T& item, int count){
+void LinkedList<T>::InsertAt(T item, int count){
     if (count == 0) {
         Prepend(item);
         return;
@@ -151,9 +149,7 @@ void LinkedList<T>::InsertAt(const T& item, int count){
     if(ptr == nullptr) {
         throw "IndexOutOfRange";
     }
-    Item<T> * elem = new Item<T>;
-    elem->data = item;
-    elem->next = ptr;
+    Item<T> * elem = new Item<T>(item, ptr);
     prev_ptr->next = elem;
     len++;
 }
@@ -200,7 +196,7 @@ LinkedList<T> * LinkedList<T>::GetSubList(int start,int end){
 }
 
 template<class T>
-void LinkedList<T>::Set(int ind,const T& item){
+void LinkedList<T>::Set(int ind,T item){
     if(ind < 0 or ind > GetLenght()){
         throw "IndexOutOfRange";
     }

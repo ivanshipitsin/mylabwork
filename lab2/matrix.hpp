@@ -6,42 +6,30 @@
 template<class T>
 class Matrix {
     public:
-        Matrix(T ** item, int n){
-            mat = new ArraySequence<ArraySequence<T> *>(n);
-            for(int i = 0; i < n; i++) {
-                ArraySequence<T> *ptr = new ArraySequence<T>(item[i], n);
-                mat->Set(i, ptr);
-            }
+        Matrix(T * item, int n){
+            mat = new ArraySequence<T>(item,n*n);
             dim = n;
         }
         Matrix() {
-            mat = new ArraySequence<ArraySequence<T> *>();
+            mat = new ArraySequence<T>();
             dim = 0;
         }
         Matrix(int n){
-            mat = new ArraySequence<ArraySequence<T> *>(n);
-            for(int i = 0; i < n; i++) {
-                ArraySequence<T> *ptr = new ArraySequence<T>(n);
-                mat->Set(i, ptr);
-            }
+            mat = new ArraySequence<T>(n*n);
             dim = n;
         }
         Matrix(const Matrix<T> & matr){
             dim = matr.GetDim();
-            mat = new ArraySequence<ArraySequence<T> *>(dim);
-            for(int i = 0; i < dim; i++) {
-                ArraySequence<T>  *ptr =new ArraySequence<T> (*(matr.mat->Get(i)));
-                mat->Set(i, ptr);
-            }
+            mat = new ArraySequence<T>(*(matr.mat));
         }
         int GetDim() const{
             return dim;
         }
         T Get(int i, int j) const{
-            return mat->Get(i)->Get(j);
+            return mat->Get(i * dim + j);
         }
         void Set(int i, int j,const T& item){
-            mat->Get(i)->Set(j, item);
+            mat->Set(i*dim + j, item);
         }
         Matrix<T> * Sum(const Matrix<T>& a) const{
             if(a.GetDim() != dim) {
@@ -77,19 +65,13 @@ class Matrix {
             }
             return p;
         }
-        ~Matrix() {
-            if(mat){
-                dim = mat->GetLenght();
-                for(int i = 0; i < dim; i++){
-                    if(mat->Get(i))
-                        delete mat->Get(i);
-                }
-                delete mat;
-            }
+        void clear(){
+            delete mat;
         }
+        
     private:
         int dim;
-        ArraySequence<ArraySequence<T> *> *mat;
+        ArraySequence<T>* mat;
 };
 template<class T>
 const Matrix<T> operator + (const Matrix<T>& left, const Matrix<T>& right) {

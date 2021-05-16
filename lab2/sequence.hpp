@@ -13,9 +13,9 @@ public:
     virtual Sequence<T>* GetSubsequence(int,int) = 0;
     virtual int GetLenght() const = 0;
     virtual void Append(const T&) = 0;
-    virtual void Prepend(T) = 0;
-    virtual void Set(int,T) = 0;
-    virtual void InsertAt( T, int) = 0;
+    virtual void Prepend(const T&) = 0;
+    virtual void Set(int,const T&) = 0;
+    virtual void InsertAt(const T&, int) = 0;
     virtual Sequence<T> * Concat(Sequence <T> *) = 0;
 };
 
@@ -30,12 +30,12 @@ public:
     T GetFirst() const;
     T GetLast() const;
     T Get(int) const;
-    void Set(int,T);
+    void Set(int,const T&);
     ArraySequence<T>* GetSubsequence(int,int);
     int GetLenght() const;
     void Append(const T&);
-    void Prepend(T);
-    void InsertAt(T, int);
+    void Prepend(const T&);
+    void InsertAt(const T&, int);
     ArraySequence<T> * Concat(Sequence <T> *);
 
 private:
@@ -52,12 +52,12 @@ public:
     T GetFirst() const;
     T GetLast() const;
     T Get(int) const;
-    void Set(int,T);
+    void Set(int,const T&);
     LinkedListSequence<T>* GetSubsequence(int,int);
     int GetLenght() const;
     void Append(const T&);
-    void Prepend(T);
-    void InsertAt(T, int);
+    void Prepend(const T&);
+    void InsertAt(const T&, int);
     LinkedListSequence<T> * Concat(Sequence <T> *);
 private:
     LinkedList<T>*  mass;
@@ -82,11 +82,11 @@ LinkedListSequence<T>::LinkedListSequence(const LinkedListSequence <T> & list) {
 
 template<class T>
 LinkedListSequence<T>::~LinkedListSequence(){
-    delete mass;
-
     #ifdef DEBUG 
         std::cerr << "Destroy Object type LinkedListSequence<T>" << mass << std::endl;
     #endif
+    
+    delete mass;
 
 }
 
@@ -106,7 +106,7 @@ T LinkedListSequence<T>::Get(int ind) const{
 }
 
 template<class T>
-void LinkedListSequence<T>::Set(int ind, T item){
+void LinkedListSequence<T>::Set(int ind,const T& item){
     mass->Set(ind, item);
 }
 
@@ -128,12 +128,12 @@ void LinkedListSequence<T>::Append(const T& item){
 }
 
 template<class T>
-void LinkedListSequence<T>::Prepend(T item){
+void LinkedListSequence<T>::Prepend(const T& item){
     mass->Prepend(item);
 }
 
 template<class T>
-void LinkedListSequence<T>::InsertAt( T item, int ind){
+void LinkedListSequence<T>::InsertAt(const T& item, int ind){
     mass->InsertAt(item, ind);
 }
 
@@ -151,20 +151,37 @@ LinkedListSequence<T> * LinkedListSequence<T>::Concat(Sequence <T> * list){
 template<class T>
 ArraySequence<T>::ArraySequence(T* item,int count){
     mass = new DynamicArray<T>(item, count);
+
+    #ifdef DEBUG 
+        std::cerr << "Generate Object type ArraySequence<T> with construct (T*, size)" << mass << " " << count << std::endl;
+        std::cerr << "Type of T" << typeid(mass->Get(0)).name() <<std::endl;
+    #endif
 }
 
 template<class T>
 ArraySequence<T>::ArraySequence(int count){
     mass = new DynamicArray<T>(count);
+
+    #ifdef DEBUG 
+        std::cerr << "Generate Object type ArraySequence<T> with construct (size)" << mass << " " << count << std::endl;
+        std::cerr << "Type of T" << typeid(mass->Get(0)).name() <<std::endl;
+    #endif
 }
 
 template<class T>
 ArraySequence<T>::ArraySequence(){
     mass = new DynamicArray<T>();
+
+    #ifdef DEBUG 
+        std::cerr << "Generate Object type ArraySequence<T> with construct ()" << mass << std::endl;
+        std::cerr << "Type of T" << typeid(mass->Get(0)).name() <<std::endl;
+    #endif
 }
 
 template<class T>
 ArraySequence<T>::ArraySequence(const ArraySequence <T> & list){
+
+
     mass = new DynamicArray<T>(*(list.mass));
 }
 
@@ -194,7 +211,7 @@ T ArraySequence<T>::Get(int ind) const{
 }
 
 template<class T>
-void ArraySequence<T>::Set(int ind, T item){
+void ArraySequence<T>::Set(int ind,const T& item){
     mass->Set(ind, item);
 }
 
@@ -217,12 +234,12 @@ void ArraySequence<T>::Append(const T& item){
 }
 
 template<class T>
-void ArraySequence<T>::Prepend(T item){
+void ArraySequence<T>::Prepend(const T& item){
     mass->Prepend(item);
 }
 
 template<class T>
-void ArraySequence<T>::InsertAt(T item, int ind){
+void ArraySequence<T>::InsertAt(const T& item, int ind){
     mass->InsertAt(ind, item);
 }
 

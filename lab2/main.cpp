@@ -27,11 +27,11 @@ int getmenu() {
 
 
 template<class T>
-void printMatrixis(const ArraySequence<Matrix<T>>&);
+void printMatrixis(const LinkedListSequence<Matrix<T>>&);
 
 int main() {
-    ArraySequence<Matrix<double>> matdd;
-    ArraySequence<Matrix<std::complex<double> > > matcc;
+    LinkedListSequence<Matrix<double>> matdd;
+    LinkedListSequence<Matrix<std::complex<double> > > matcc;
     bool turn = true;
         while(turn) {
             int ch = getmenu();
@@ -40,7 +40,7 @@ int main() {
                     turn = 0;
                     break;
                 case 2:{
-                        double ** temp;
+                        double * temp;
                         int n = 0;
                         std::cout << "Enter dimention:\n";
                         std::cin >> n;
@@ -57,7 +57,7 @@ int main() {
                         break;
                     }
                 case 3: {
-                        std::complex<double> ** temp;
+                        std::complex<double> * temp;
                         int n = 0;
                         std:: cout << "Enter dimention:\n";
                         std::cin >> n;
@@ -67,8 +67,7 @@ int main() {
                         }*/
                         std::cout << "Enter Matrix:\n";
                         temp = read<std::complex<double>>(std::cin, n);
-                        Matrix<std::complex<double>> newmat(temp, n);
-                        matcc.Append(newmat);
+                        matcc.Append(Matrix<std::complex<double>>(temp, n));
                         scanf("%*c");
                         clear<std::complex<double>>(temp, n);
                         break;
@@ -162,6 +161,12 @@ int main() {
             }
         }
     
+    for(int i = 0; i < matdd.GetLenght(); i ++){
+        matdd.Get(i).clear();
+    }
+    for(int i = 0; i < matcc.GetLenght(); i ++){
+        matcc.Get(i).clear();
+    }
 
     /*int ** masivblackhole = new int *[4];
     for(int i = 0; i < 4; i++){
@@ -193,7 +198,7 @@ int main() {
 
 
 template<class T>
-void printMatrixis(const ArraySequence<Matrix<T>> & data) {
+void printMatrixis(const LinkedListSequence<Matrix<T>> & data) {
     for(int i = 0; i < data.GetLenght(); i++){
         std::cout << std::endl;
         Matrix<T> item;

@@ -1,4 +1,4 @@
-#define DEBUG
+//#define DEBUG
 
 #include <iostream>
 #include "list.hpp"
@@ -9,7 +9,7 @@
 
 
 int dynamictestcreate(){ // test for debug memory error and memleak
-    DynamicArray<int> a(); // first construction
+    DynamicArray<int> a; // first construction
     DynamicArray<int> b(10); // second
     int * array;
     array = new int[10];
@@ -59,25 +59,21 @@ int matrixtestcreat(){
     std::cout << mat.GetDim() << std::endl;
     Matrix<int> mat1(10);
     std::cout << mat1.GetDim() << std::endl;
-    int ** massive = new int *[10];
+    int * massive = new int [100];
     for (int i = 0; i < 10; i++){
-        massive[i] = new int [10];
         for(int j = 0; j < 10; j++){
-            massive[i][j] = i + j;
+            massive[i*10 + j] = i + j;
         }
     }
     Matrix<int> mat2(massive, 10);
     std::cout << mat2.GetDim() << " " << mat2.Get(5,6) << std::endl;
-    for(int i = 0; i < 10; i++){
-        delete[] massive[i];
-    }
     delete [] massive;
     return 0;
 }
 
 int errortestcode(){
-    ArraySequence<Matrix<double>> matdd;
-    double ** temp;
+    LinkedListSequence<Matrix<double> > matdd;
+    double * temp;
     int n = 0;
     std::cout << "Enter dimention:\n";
     std::cin >> n;
@@ -87,14 +83,15 @@ int errortestcode(){
     matdd.Append(newmatr);
     scanf("%*c");
     clear<double>(temp, n);
+    newmatr.clear();
     return 0;
 }
 
 int main(int argc,  char ** argv){
     std::cout << "\\\\\\\\\\\\BENCHMAKER2000\\\\\\\\\\\\" << std::endl;
-    dynamictestcreate();
-    dynamictestget();
-    matrixtestcreat();
+    //dynamictestcreate();
+    //dynamictestget();
+    //matrixtestcreat();
     errortestcode();
     return 0;
 }
