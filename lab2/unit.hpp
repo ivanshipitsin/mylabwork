@@ -5,11 +5,9 @@
 
 template<class T>
 T * read(std::istream & in, int size){
-    T * res = new T[size * size];
+    T * res = new T[size];
     for(int i = 0; i < size; i++) {
-        for(int j = 0; j < size; j++) {
-            std::cin >> res[i*size + j];
-        }
+        in >> res[i];
     }
     #ifdef DEBUG 
         std::cerr << "Read Object type T**" << res << " " << size << std::endl;
@@ -27,5 +25,20 @@ void clear(T* masivblackhole, int size){
     delete [] masivblackhole;
 }
 
+
+template<class T>
+int comparedata(Sequence<T> * ptr, T* data, int count){
+    try{
+        for(int i = 0; i < count ; i++){
+            if(ptr->Get(i) != data[i]){
+                std::cerr << "error in :" << ptr->Get(i) << "!=" << data[i] << std::endl;
+            }
+        }
+    }catch(const char * s){
+        std::cerr << s << std::endl;
+        return -1;
+    }
+    return 0;
+}
 
 #endif

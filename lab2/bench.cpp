@@ -1,6 +1,7 @@
 //#define DEBUG
 
 #include <iostream>
+#include <fstream>
 #include "list.hpp"
 #include "dynamic.hpp"
 #include "sequence.hpp"
@@ -78,7 +79,7 @@ int errortestcode(){
     std::cout << "Enter dimention:\n";
     std::cin >> n;
     std::cout << "Enter Matrix:\n";
-    temp = read<double>(std::cin, n); 
+    temp = read<double>(std::cin, n*n); 
     Matrix<double> newmatr(temp, n);
     matdd.Append(newmatr);
     scanf("%*c");
@@ -87,11 +88,80 @@ int errortestcode(){
     return 0;
 }
 
+int concatsequencetest(){
+    std::ifstream in("test/concatsequence");
+    if(!in.is_open()){
+        std::cerr << "FILE NOT OPEN" << std::endl;
+        return -2;
+    }
+    int count = 0;
+    in >> count;
+    for(int n = 0; n < count; n++){
+        int size1 = 0, size2 = 0, size3 = 0;
+        in >> size1;
+        int* data1, *data2, *data3;
+        data1 = read<int>(in, size1);
+        in >> size2;
+        data2 = read<int>(in, size2);
+        in >> size3;
+        data3 = read<int>(in, size3);
+        ArraySequence<int> a1(data1,size1);
+        ArraySequence<int> a2(data2,size2);
+        ArraySequence<int> * a3 = a1.Concat(&a2);
+        std::cerr << "Concat in ArraySequence" << std::endl;
+        comparedata<int>(a3, data3, size3);
+
+        LinkedListSequence<int> l1(data1,size1);
+        LinkedListSequence<int> l2(data2,size2);
+        LinkedListSequence<int> * l3 = l1.Concat(&l2);
+        std::cerr << "Concat in LinkedListSequence" << std::endl;
+        comparedata<int>(l3, data3, size3);
+
+        clear<int>(data1, size1);
+        clear<int>(data2, size2);
+        clear<int>(data3, size3);
+    }
+    return 0;
+}
+
+int subsequencetest(){
+    std::ifstream in("test/subsequence");
+    if(!in.is_open()){
+        std::cerr << "FILE NOT OPEN" << std::endl;
+        return -2;
+    }
+    int count = 0;
+    in >> count;
+    for(int n = 0; n < count; n++){
+        int size1 = 0, start = 0, end = 0;
+        in >> size1;
+        int* data1, *data2;
+        data1 = read<int>(in, size1);
+        in >> start >> end;
+        data2 = read<int>(in, end - start + 1);
+        ArraySequence<int> a1(data1, size1);
+        ArraySequence<int> * a3 = a1.GetSubsequence(start, end);
+        std::cerr << "SubSequence in ArraySequence" << std::endl;
+        comparedata<int>(a3, data2, end - start + 1);
+
+        LinkedListSequence<int> l1(data1,size1);
+        LinkedListSequence<int> * l3 = l1.GetSubsequence(start, end);
+        std::cerr << "SubSequence in LinkedListSequence" << std::endl;
+        comparedata<int>(l3, data2, end - start + 1);
+
+        clear<int>(data1, size1);
+        clear<int>(data2, end - start + 1);
+    }
+    return 0;
+}
+
 int main(int argc,  char ** argv){
     std::cout << "\\\\\\\\\\\\BENCHMAKER2000\\\\\\\\\\\\" << std::endl;
-    //dynamictestcreate();
-    //dynamictestget();
-    //matrixtestcreat();
-    errortestcode();
+    dynamictestcreate();
+    dynamictestget();
+    matrixtestcreat();
+    //errortestcode();
+    subsequencetest();
+    concatsequencetest();
     return 0;
 }

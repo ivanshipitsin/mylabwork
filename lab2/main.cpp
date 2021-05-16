@@ -5,6 +5,7 @@
 #include <complex>
 #include "unit.hpp"
 
+
 const std::string MSG[] = {"1.EXIT", "2.Enter matrix (in real)", "3. Enter matrix (in complex)", "4. SUM (NUM1, NUM2)", "5. Scalar (NUM, SCLAR)" , "6. NORM (NUM)" , "7. List Matrix" };
 const int SMSG = 7;
 
@@ -49,7 +50,7 @@ int main() {
                             break;
                         }*/
                         std::cout << "Enter Matrix:\n";
-                        temp = read<double>(std::cin, n);
+                        temp = read<double>(std::cin, n*n);
                         Matrix<double> newmatr(temp, n);
                         matdd.Append(newmatr);
                         scanf("%*c");
@@ -66,7 +67,7 @@ int main() {
                             break;
                         }*/
                         std::cout << "Enter Matrix:\n";
-                        temp = read<std::complex<double>>(std::cin, n);
+                        temp = read<std::complex<double>>(std::cin, n*n);
                         matcc.Append(Matrix<std::complex<double>>(temp, n));
                         scanf("%*c");
                         clear<std::complex<double>>(temp, n);

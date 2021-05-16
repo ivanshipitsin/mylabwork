@@ -37,6 +37,7 @@ public:
     void Prepend(const T&);
     void InsertAt(const T&, int);
     ArraySequence<T> * Concat(Sequence <T> *);
+    //friend void clear();
 
 private:
     DynamicArray<T>* mass;
@@ -59,6 +60,7 @@ public:
     void Prepend(const T&);
     void InsertAt(const T&, int);
     LinkedListSequence<T> * Concat(Sequence <T> *);
+    //friend void clear();
 private:
     LinkedList<T>*  mass;
 };

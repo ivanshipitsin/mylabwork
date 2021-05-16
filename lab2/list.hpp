@@ -5,7 +5,7 @@ template<class T>
 struct Item {
     T data;
     struct Item * next;
-    Item(const T& pdata,struct Item* pNext = nullptr){
+    Item(T pdata = T(),struct Item* pNext = nullptr){
         data = pdata;
         next = pNext;
     }
@@ -77,6 +77,7 @@ void LinkedList<T>::Append(const T& item){
         tail = ptr;
     }else{
         tail->next = ptr;
+        tail = ptr;
     }
     len++;
 }

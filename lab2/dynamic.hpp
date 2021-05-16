@@ -180,6 +180,7 @@ DynamicArray<T> * DynamicArray<T>::Getsubarray(int start , int end){
     DynamicArray<T> * res = new DynamicArray<T>();
     res->mass = mass + start;
     res-> len = end - start + 1;
+    res->cap = end - start + 1;
     return res;
 
 }
