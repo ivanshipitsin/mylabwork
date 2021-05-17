@@ -1,7 +1,7 @@
 #ifndef UNIT_HPP
 #define UNIT_HPP
 #include <iostream>
-
+#include <Vector.hpp>
 
 template<class T>
 T * read(std::istream & in, int size){
@@ -28,6 +28,21 @@ void clear(T* masivblackhole, int size){
 
 template<class T>
 int comparedata(Sequence<T> * ptr, T* data, int count){
+    try{
+        for(int i = 0; i < count ; i++){
+            if(ptr->Get(i) != data[i]){
+                std::cerr << "error in :" << ptr->Get(i) << "!=" << data[i] << std::endl;
+            }
+        }
+    }catch(const char * s){
+        std::cerr << s << std::endl;
+        return -1;
+    }
+    return 0;
+}
+
+template<class T>
+int comparedatav(Vector<T> * ptr, T* data, int count){
     try{
         for(int i = 0; i < count ; i++){
             if(ptr->Get(i) != data[i]){

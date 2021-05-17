@@ -7,7 +7,7 @@
 #include "sequence.hpp"
 #include "matrix.hpp"
 #include "unit.hpp"
-
+#include "Vector.hpp"
 
 int dynamictestcreate(){ // test for debug memory error and memleak
     DynamicArray<int> a; // first construction
@@ -155,6 +155,95 @@ int subsequencetest(){
     return 0;
 }
 
+int vectestsum(){
+    std::ifstream in("test/vecsum");
+    if(!in.is_open()){
+        std::cerr << "FILE NOT OPEN" << std::endl;
+        return -2;
+    }
+    int count = 0;
+    in >> count;
+    for(int n = 0; n < count; n++){
+        int size = 0;
+        in >> size;
+        int* data1, *data2, *data3;
+        data1 = read<int>(in, size);
+        data2 = read<int>(in, size);
+        data3 = read<int>(in, size);
+        Vector<int> v1(data1, size);
+        Vector<int> v2(data2, size);
+        Vector<int> * v3 = v1.sum(v2);
+        std::cerr << "VectorSum test:" << std::endl;
+        comparedatav<int>(v3, data3, size);
+
+        clear<int>(data1, size);
+        clear<int>(data2, size);
+        clear<int>(data3, size);
+        v1.clear();
+        v2.clear();
+        v3->clear();
+        delete v3;
+    }
+    return 0;
+}
+
+int vectestscalar(){
+    std::ifstream in("test/vecscalar");
+    if(!in.is_open()){
+        std::cerr << "FILE NOT OPEN" << std::endl;
+        return -2;
+    }
+    int count = 0;
+    in >> count;
+    for(int n = 0; n < count; n++){
+        int size = 0, scal = 0;
+        in >> size;
+        int* data1, *data2;
+        data1 = read<int>(in, size);
+        in >> scal;
+        data2 = read<int>(in, size);
+        Vector<int> v1(data1, size);
+        Vector<int> * v3 = v1.scalar(scal);
+        std::cerr << "VectorScalar test:" << std::endl;
+        comparedatav<int>(v3, data2, size);
+        
+        clear<int>(data1, size);
+        clear<int>(data2, size);
+        v3->clear();
+        delete v3;
+        v1.clear();
+    }
+    return 0;
+}
+
+int vectestnorm(){
+    std::ifstream in("test/vecnorm");
+    if(!in.is_open()){
+        std::cerr << "FILE NOT OPEN" << std::endl;
+        return -2;
+    }
+    int count = 0;
+    in >> count;
+    for(int n = 0; n < count; n++){
+        int size = 0;
+        double res = 0;
+        in >> size;
+        int* data1;
+        data1 = read<int>(in, size);
+        in >> res;
+        Vector<int> v1(data1, size);
+        double maybe = v1.norm();
+        std::cerr << "VectorNorm test:" << std::endl;
+        if(std::abs(maybe - res) > 0.00001){
+            std::cerr << "Error in VectorNorm test" << std::endl;
+        }
+        
+        clear<int>(data1, size);
+        v1.clear();
+    }
+    return 0;
+}
+
 int main(int argc,  char ** argv){
     std::cout << "\\\\\\\\\\\\BENCHMAKER2000\\\\\\\\\\\\" << std::endl;
     dynamictestcreate();
@@ -163,5 +252,8 @@ int main(int argc,  char ** argv){
     //errortestcode();
     subsequencetest();
     concatsequencetest();
+    vectestnorm();
+    vectestscalar();
+    vectestsum();
     return 0;
 }
