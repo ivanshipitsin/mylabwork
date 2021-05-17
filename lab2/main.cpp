@@ -4,10 +4,12 @@
 #include "matrix.hpp"
 #include <complex>
 #include "unit.hpp"
+#include "Vector.hpp"
 
 
-const std::string MSG[] = {"1.EXIT", "2.Enter matrix (in real)", "3. Enter matrix (in complex)", "4. SUM (NUM1, NUM2)", "5. Scalar (NUM, SCLAR)" , "6. NORM (NUM)" , "7. List Matrix" };
-const int SMSG = 7;
+
+const std::string MSG[] = {"1.EXIT", "2.Enter matrix (in real)", "3. Enter matrix (in complex)", "4. SUM (NUM1, NUM2)", "5. Scalar (NUM, SCLAR)" , "6. NORM (NUM)" , "7. List Matrix" , "8.Enter vector", "9.List vector", "10.Sum vector", "11. scalar ", "12. dot", "13. norm"};
+const int SMSG = 13;
 
 int getmenu() {
     std::string error = "";
@@ -19,7 +21,7 @@ int getmenu() {
             std::cout << MSG[i] << std::endl;
         }
         std::cout << "Make your choice: ";
-        ch = getchar() - '0';
+        std::cin >> ch;
         while (getchar() != '\n') {}
     } while(ch < 1 || ch > SMSG);
 
@@ -33,6 +35,7 @@ void printMatrixis(const LinkedListSequence<Matrix<T>>&);
 int main() {
     LinkedListSequence<Matrix<double>> matdd;
     LinkedListSequence<Matrix<std::complex<double> > > matcc;
+    LinkedListSequence<Vector<double> > vecdd;
     bool turn = true;
         while(turn) {
             int ch = getmenu();
@@ -87,11 +90,11 @@ int main() {
                     if(real == 2) {
                         Matrix<double> temp = matdd.Get(num1 - 1) + matdd.Get(num2 - 1);
                         matdd.Append(temp);
-                        std::cout << "New Number for your matrix :" << matdd.GetLenght();
+                        std::cout << "New Number for your matrix :" << matdd.GetLenght() << std::endl;
                     } else if( real == 1){
                         Matrix<std::complex<double>> temp = matcc.Get(num1 - 1) + matcc.Get(num2 - 1);
                         matcc.Append(temp);
-                        std::cout << "New Number for your matrix :" << matcc.GetLenght();
+                        std::cout << "New Number for your matrix :" << matcc.GetLenght() << std::endl;
                     }
 
                     scanf("%*c");
@@ -111,14 +114,14 @@ int main() {
                         std::cin >> scal;
                         Matrix<double> temp = matdd.Get(NUM - 1) * scal;
                         matdd.Append(temp);
-                        std::cout << "New number for your matrix:" << matdd.GetLenght();
+                        std::cout << "New number for your matrix:" << matdd.GetLenght() << std::endl;
                     } else if(real == 1) {
                         std::complex<double> scal;
                         std::cout << "Enter Scalar:";
                         std::cin >> scal;
                         Matrix<std::complex<double>> temp = matcc.Get(NUM - 1) * scal;
                         matcc.Append(temp);
-                        std::cout << "New number for your matrix:" << matcc.GetLenght();
+                        std::cout << "New number for your matrix:" << matcc.GetLenght() << std::endl;
                     }
 
                     scanf("%*c");
@@ -153,12 +156,108 @@ int main() {
                         scanf("%*c");
                         break;
                     }
-                case 7:
+                case 7:{
                     std::cout << "Real Matrix :";
                     printMatrixis<double>(matdd);
                     std::cout << "Complex Matrix :";
                     printMatrixis<std::complex<double>>(matcc);
+                    scanf("%*c");
                     break;
+                }
+                case 8:{
+                    double * temp;
+                    int n = 0;
+                    std::cout << "Enter dimention:\n";
+                    std::cin >> n;
+                        /*if(!scanf("%d", &n)) {
+                            fprintf(stderr, "Error enter dimention\n");
+                            break;
+                        }*/
+                    std::cout << "Enter Vector:\n";
+                    temp = read<double>(std::cin, n);
+                    Vector<double> newvec(temp, n);
+                    vecdd.Append(newvec);
+                    scanf("%*c");
+                    clear<double>(temp, n);
+                    break;
+                }
+                case 9:{
+                    for(int i = 0; i < vecdd.GetLenght(); i++){
+                        Vector<double>  ptr = vecdd.Get(i);
+                        std::cout << "Vector N:" << i << std::endl;
+                        std::cout << "{";
+                        for(int j = 0; j < ptr.GetDim(); j++){
+                            std::cout << ptr.Get(j) << ", ";
+                        }
+                        std::cout << "}" << std::endl;
+                        ptr.clear();
+                    }
+                    scanf("%*c");
+                    break;
+                }
+                case 10:{
+                    std::cout << "Man: SUM(NUM1,NUM2) =: NEWNUM = NUM1 + NUM2\n";
+                    std::cout << "Enter NUM1:";
+                    int num1 = 0, num2 = 0;
+                    std::cin >> num1;
+                    std::cout << "Enter NUM2:";
+                    std::cin >> num2;
+                    
+                    
+                    Vector<double> *temp = vecdd.Get(num1 - 1).sum(vecdd.Get(num2 - 1));
+                    vecdd.Append(*temp);
+                    std::cout << "New Number for your vector :" << vecdd.GetLenght() << std::endl;
+
+                    scanf("%*c");
+                    break;
+                }
+                case 11:{
+                    printf("Man: Scalar(NUM,SCLAR) =:  NEWNUM = NUM * SCLAR\n");
+                    int NUM = 0;
+                    printf("Enter NUM:");
+                    std::cin >> NUM;
+                    double scal;
+                    std::cout << "Enter Scalar:";
+                    std::cin >> scal;
+                    Vector<double>* temp = vecdd.Get(NUM - 1).scalar(scal);
+                    vecdd.Append(*temp);
+                    std::cout << "New number for your vector:" << vecdd.GetLenght() << std::endl;
+                    scanf("%*c");
+                    break;
+                }
+                case 12:{
+                    std::cout << "Man: DOT(NUM1,NUM2) =: Result = (NUM1 , NUM2)\n";
+                    std::cout << "Enter NUM1:";
+                    int num1 = 0, num2 = 0;
+                    std::cin >> num1;
+                    std::cout << "Enter NUM2:";
+                    std::cin >> num2;
+                    
+                    
+                    std::complex<double> res = vecdd.Get(num1 - 1).dot(vecdd.Get(num2 - 1));
+                    std::cout << "Result :" << res << std::endl;
+
+                    scanf("%*c");
+                    break;
+                }
+                case 13:{
+                        std::cout << "Man: NORM(NUM) =: res = NUM(ARGV)\n";
+                        std::cout << "Enter NUM:";
+                        int num = 0;
+                        std::cin >> num;
+                        double res = 0;
+                        try{
+                            res = vecdd.Get(num - 1).norm();
+                        } catch(const char* s){
+                            std::cerr << s << std::endl;
+                            break;
+                        }
+                        
+                        std::cout << "Result:" << res << std::endl;
+                        scanf("%*c");
+                        break;
+                }
+
             }
         }
     
