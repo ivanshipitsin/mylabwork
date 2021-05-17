@@ -190,7 +190,7 @@ int vectestsum(){
 int vectestscalar(){
     std::ifstream in("test/vecscalar");
     if(!in.is_open()){
-        std::cerr << "FILE NOT OPEN" << std::endl;
+        std::cerr << "FILE NOT OPEN VECTESTSCALAR" << std::endl;
         return -2;
     }
     int count = 0;
@@ -228,17 +228,107 @@ int vectestnorm(){
         int size = 0;
         double res = 0;
         in >> size;
-        int* data1;
-        data1 = read<int>(in, size);
+        double* data1;
+        data1 = read<double>(in, size);
         in >> res;
-        Vector<int> v1(data1, size);
+        Vector<double> v1(data1, size);
         double maybe = v1.norm();
         std::cerr << "VectorNorm test:" << std::endl;
         if(std::abs(maybe - res) > 0.00001){
             std::cerr << "Error in VectorNorm test" << std::endl;
         }
         
+        clear<double>(data1, size);
+        v1.clear();
+    }
+    return 0;
+}
+
+
+int mattestsum(){
+    std::ifstream in("test/matsum");
+    if(!in.is_open()){
+        std::cerr << "FILE NOT OPEN" << std::endl;
+        return -2;
+    }
+    int count = 0;
+    in >> count;
+    for(int n = 0; n < count; n++){
+        int size = 0;
+        in >> size;
+        int* data1, *data2, *data3;
+        data1 = read<int>(in, size*size);
+        data2 = read<int>(in, size*size);
+        data3 = read<int>(in, size*size);
+        Matrix<int> v1(data1, size);
+        Matrix<int> v2(data2, size);
+        Matrix<int> * v3 = v1.Sum(v2);
+        std::cerr << "MatrixSum test:" << std::endl;
+        comparedatam<int>(v3, data3, size);
+
         clear<int>(data1, size);
+        clear<int>(data2, size);
+        clear<int>(data3, size);
+        v1.clear();
+        v2.clear();
+        v3->clear();
+        delete v3;
+    }
+    return 0;
+}
+
+int mattestnorm(){
+    std::ifstream in("test/matnorm");
+    if(!in.is_open()){
+        std::cerr << "FILE NOT OPEN" << std::endl;
+        return -2;
+    }
+    int count = 0;
+    in >> count;
+    for(int n = 0; n < count; n++){
+        int size = 0;
+        double res = 0;
+        in >> size;
+        double* data1;
+        data1 = read<double>(in, size*size);
+        in >> res;
+        Matrix<double> v1(data1, size);
+        double maybe = v1.norm();
+        std::cerr << "MatrixNorm test:" << std::endl;
+        if(std::abs(maybe - res) > 0.00001){
+            std::cerr << "Error in VectorNorm test" << std::endl;
+        }
+        
+        clear<double>(data1, size);
+        v1.clear();
+    }
+    return 0;
+}
+
+int mattestscalar(){
+    std::ifstream in("test/matscalar");
+    if(!in.is_open()){
+        std::cerr << "FILE NOT OPEN VECTESTSCALAR" << std::endl;
+        return -2;
+    }
+    int count = 0;
+    in >> count;
+    for(int n = 0; n < count; n++){
+        int size = 0, scal = 0;
+        in >> size;
+        int* data1, *data2;
+        data1 = read<int>(in, size*size);
+        in >> scal;
+        data2 = read<int>(in, size*size);
+        Matrix<int> v1(data1, size);
+        Matrix<int> * v3 = v1.Scalar(scal);
+        std::cerr << "MatrixScalar test:" << std::endl;
+        comparedatam<int>(v3, data2, size);
+        
+        clear<int>(data1, size);
+        clear<int>(data2, size);
+        v3->clear();
+        delete v3;
         v1.clear();
     }
     return 0;
@@ -255,5 +345,8 @@ int main(int argc,  char ** argv){
     vectestnorm();
     vectestscalar();
     vectestsum();
+    mattestsum();
+    mattestnorm();
+    mattestscalar();
     return 0;
 }
