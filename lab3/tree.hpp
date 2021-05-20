@@ -19,6 +19,10 @@ public:
         root = nullptr;
     }
 
+    int HE(){
+        return root->height;
+    }
+
     Node<Tv,Tk> * foundNode(Tk key){
         return foundNoderev(key, root);
     }
@@ -29,7 +33,7 @@ public:
             ptr->value = value;
         } else {
             addNoderev(key, value, root);
-            balancing(root);
+            //balancing(root);
         }
     }
 
@@ -37,7 +41,7 @@ public:
         Node<Tv,Tk> * ptr = foundNode(key);
         if(!ptr) {
             throw "Not found Node";
-        } else if((ptr->left) && (ptr->right) && (ptr->right->height < ptr->left->height) || (!ptr->right)){
+        } else if((ptr->left) && (ptr->right) && (ptr->right->height < ptr->left->height) || (!ptr->right)&&(ptr->left)){
             Node<Tv,Tk> * curr = ptr->left;
             while(curr->right != nullptr){
                 curr = curr->right;
@@ -45,6 +49,11 @@ public:
             ptr->key = curr->key;
             ptr->value = curr->value;
             Node<Tv,Tk> * paren = curr->parent;
+            if(paren->left == curr){
+                paren->left = nullptr;
+            } else {
+                paren->right = nullptr;
+            }
             delete curr;
 
             while(paren != nullptr){
@@ -52,7 +61,7 @@ public:
                 paren = paren->parent;
             }
 
-        } else if((ptr->left) && (ptr->right) && (ptr->right->height > ptr->left->height) || (!ptr->left)){
+        } else if((ptr->left) && (ptr->right) && (ptr->right->height > ptr->left->height) || (!ptr->left)&&(ptr->right)){
             Node<Tv,Tk> * curr = ptr->right;
             while(curr->left != nullptr){
                 curr = curr->left;
@@ -60,6 +69,12 @@ public:
             ptr->key = curr->key;
             ptr->value = curr->value;
             Node<Tv,Tk> * paren = curr->parent;
+            if(paren->left == curr){
+                paren->left = nullptr;
+            } else {
+                paren->right = nullptr;
+            }
+
             delete curr;
 
             while(paren != nullptr){
@@ -80,11 +95,21 @@ public:
                 ptr->key = currL->key;
                 ptr->value = currL->value;
                 paren = currL->parent;
+                if(paren->left == currL){
+                    paren->left = nullptr;
+                } else {
+                    paren->right = nullptr;
+                }
                 delete currL;
             } else {
                 ptr->key = currR->key;
                 ptr->value = currR->value;
                 paren = currR->parent;
+                if(paren->left == currR){
+                    paren->left = nullptr;
+                } else {
+                    paren->right = nullptr;
+                }
                 delete currR;
             }
 
@@ -94,13 +119,22 @@ public:
             }
         } else if((!ptr->left) && (!ptr->right)){
             Node<Tv,Tk> * paren = ptr->parent;
+            if(paren->left == ptr){
+                paren->left = nullptr;
+            } else {
+                paren->right = nullptr;
+            }
             delete ptr;
-            
+
             while(paren != nullptr){
                 balancing(paren);
                 paren = paren->parent;
             }
         }
+    }
+
+    ~Tree(){
+        deleteTree(root);
     }
 protected:
     Node<Tv,Tk> * foundNoderev(Tk key, Node<Tv,Tk> * ptr){
@@ -110,10 +144,10 @@ protected:
         if(ptr->key == key){
             return ptr;
         }
-        if(ptr->key < key){
+        if(ptr->key > key){
             return foundNoderev(key, ptr->left);
         }
-        if(ptr->key > key){
+        if(ptr->key < key){
             return foundNoderev(key, ptr->right);
         }
     }
@@ -126,32 +160,32 @@ protected:
             newptr->right = nullptr;
             newptr->left = nullptr;
             newptr->parent = nullptr;
-            newptr->height = 0;
+            newptr->height = 1;
             root = newptr;
             return; 
-        }else if(!ptr->key >= key && (!ptr->right)){
+        }else if(ptr->key < key && (!ptr->right)){
             Node<Tv, Tk> * newptr = new Node<Tv,Tk>;
             newptr->key = key;
             newptr->value = value;
             newptr->right = nullptr;
             newptr->left = nullptr;
             newptr->parent = ptr;
-            newptr->height = 0;
+            newptr->height = 1;
             ptr->right = newptr;
-        }else if(ptr->key >= key && ptr->rigth){
-            addNode(key, value, ptr->right);
+        }else if(ptr->key < key && ptr->right){
+            addNoderev(key, value, ptr->right);
             return;
-        }else if(!ptr->key < key && (!ptr->left)){
+        }else if(ptr->key > key && (!ptr->left)){
             Node<Tv, Tk> * newptr = new Node<Tv,Tk>;
             newptr->key = key;
             newptr->value = value;
             newptr->right = nullptr;
             newptr->left = nullptr;
             newptr->parent = ptr;
-            newptr->height = 0;
+            newptr->height = 1;
             ptr->left = newptr;
-        } else if(ptr->key < key){
-            addNode(key, value, ptr->left);
+        } else if(ptr->key > key){
+            addNoderev(key, value, ptr->left);
             return;
         }
         Node<Tv,Tk> * curr = ptr;
@@ -159,9 +193,16 @@ protected:
             fixheight(curr);
             curr = curr->parent;
         }
-
-        if(curr) {
-            balancing(curr);
+        if(curr){
+            if(curr->parent){
+                if(curr->parent->left == curr){
+                    curr->parent->left = balancing(curr);
+                } else if(curr->parent->right == curr){
+                    curr->parent->right = balancing(curr);
+                }
+            } else {
+                root = balancing(root);
+            }
         }
 
     }
@@ -172,10 +213,13 @@ protected:
         c->parent = a->parent;
 
         b->right = c->left;
-        c->left->parent = b;
-
+        if(b->right){
+            c->left->parent = b;
+        }
         a->left = c->right;
-        c->right->parent = a;
+        if(a->left){
+            c->right->parent = a;
+        }
 
         c->right = a;
         a->parent = c;
@@ -196,7 +240,9 @@ protected:
         b->parent = a->parent;
 
         a->left = b->right;
-        b->right->parent = a;
+        if(b->right){
+            b->right->parent = a;
+        }
 
         b->right = a;
         a->parent = b;
@@ -212,10 +258,14 @@ protected:
         c->parent = a->parent;
 
         a->right = c->left;
-        a->right->parent = a;
+        if(a->right){
+            a->right->parent = a;
+        }
 
         b->left = c->right;
-        b->left->parent = b;
+        if(b->left){
+            b->left->parent = b;
+        }
 
         c->left = a;
         a->parent = c;
@@ -226,20 +276,22 @@ protected:
         fixheight(a);
         fixheight(b);
         fixheight(c);
-
+        return c;
     }
     Node<Tv,Tk> * leftlittle(Node<Tv,Tk> * a){
         Node<Tv,Tk> * b = a->right;
         b->parent = a->parent;
 
         a->right = b->left;
-        b->left->parent = a;
+        if(b->left){
+            b->left->parent = a;
+        }
 
         b->left = a;
         a->parent = b;
         fixheight(a);
         fixheight(b);
-
+        return b;
 
     }
 
@@ -260,21 +312,48 @@ protected:
 	    p->height = (hl>hr?hl:hr)+1;
     }
 
-    void balancing(Node<Tv,Tk> * curr){
+    Node<Tv,Tk>* balancing(Node<Tv,Tk> * curr){
         if(curr == nullptr){
-            return;
+            return nullptr;
         }else if(bfactor(curr) == 2){
             if(bfactor(curr->right) >= 0){
-                curr = leftlittle(curr);
+                return leftlittle(curr);
             } else {
-                curr = leftbig(curr);
+                return leftbig(curr);
             }
         } else if(bfactor(curr) == -2){
             if(bfactor(curr->left) <= 0){
-                curr = rightlittle(curr);
+                return rightlittle(curr);
             } else {
-                curr = rightbig(curr);
+                return rightbig(curr);
             }
+        }
+        return curr;
+    }
+
+    void deleteTree(Node<Tv,Tk> * a){
+        if(a == nullptr){
+            return;
+        }
+        if(!(a->left) && !(a->right)){
+            if(a->parent){
+                if(a->parent->right == a){
+                    a->parent->right = nullptr;
+                } else if(a->parent->left == a){
+                    a->parent->left = nullptr;
+                }
+            }
+            delete a;
+        } else if(!(a->left)){
+            deleteTree(a->right);
+            deleteTree(a);
+        } else if(!(a->right)) {
+            deleteTree(a->left);
+            deleteTree(a);
+        } else {
+            deleteTree(a->left);
+            deleteTree(a->right);
+            deleteTree(a);
         }
     }
 private:
