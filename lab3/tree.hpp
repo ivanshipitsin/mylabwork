@@ -39,98 +39,15 @@ public:
 
     void deleteNode(Tk key){
         Node<Tv,Tk> * ptr = foundNode(key);
-        if(!ptr) {
-            throw "Not found Node";
-        } else if((ptr->left) && (ptr->right) && (ptr->right->height < ptr->left->height) || (!ptr->right)&&(ptr->left)){
-            Node<Tv,Tk> * curr = ptr->left;
-            while(curr->right != nullptr){
-                curr = curr->right;
-            }
-            ptr->key = curr->key;
-            ptr->value = curr->value;
-            Node<Tv,Tk> * paren = curr->parent;
-            if(paren->left == curr){
-                paren->left = nullptr;
-            } else {
-                paren->right = nullptr;
-            }
-            delete curr;
-
-            while(paren != nullptr){
-                balancing(paren);
-                paren = paren->parent;
-            }
-
-        } else if((ptr->left) && (ptr->right) && (ptr->right->height > ptr->left->height) || (!ptr->left)&&(ptr->right)){
-            Node<Tv,Tk> * curr = ptr->right;
-            while(curr->left != nullptr){
-                curr = curr->left;
-            }
-            ptr->key = curr->key;
-            ptr->value = curr->value;
-            Node<Tv,Tk> * paren = curr->parent;
-            if(paren->left == curr){
-                paren->left = nullptr;
-            } else {
-                paren->right = nullptr;
-            }
-
-            delete curr;
-
-            while(paren != nullptr){
-                balancing(paren);
-                paren = paren->parent;
-            }
-        } else if((ptr->left) && (ptr->right) && (ptr->right->height == ptr->left->height)){
-            Node<Tv,Tk> * currR = ptr->right;
-            while(currR->left != nullptr){
-                currR = currR->left;
-            }
-            Node<Tv,Tk> * currL = ptr->left;
-            while(currL->right != nullptr){
-                currL = currL->right;
-            }
-            Node<Tv,Tk> * paren;
-            if(( ptr->key - currL->key) < (currR->key - ptr->key)){
-                ptr->key = currL->key;
-                ptr->value = currL->value;
-                paren = currL->parent;
-                if(paren->left == currL){
-                    paren->left = nullptr;
-                } else {
-                    paren->right = nullptr;
-                }
-                delete currL;
-            } else {
-                ptr->key = currR->key;
-                ptr->value = currR->value;
-                paren = currR->parent;
-                if(paren->left == currR){
-                    paren->left = nullptr;
-                } else {
-                    paren->right = nullptr;
-                }
-                delete currR;
-            }
-
-            while(paren != nullptr){
-                balancing(paren);
-                paren = paren->parent;
-            }
-        } else if((!ptr->left) && (!ptr->right)){
-            Node<Tv,Tk> * paren = ptr->parent;
-            if(paren->left == ptr){
-                paren->left = nullptr;
-            } else {
-                paren->right = nullptr;
-            }
-            delete ptr;
-
-            while(paren != nullptr){
-                balancing(paren);
-                paren = paren->parent;
-            }
+        if(ptr){
+            deleteNoderev(ptr);
+        } else {
+            throw key;
         }
+    }
+
+    void printTree(){
+        printTreerev(root, 1);
     }
 
     ~Tree(){
@@ -212,6 +129,14 @@ protected:
         Node<Tv,Tk> * c = b->right;
         c->parent = a->parent;
 
+        if(c->parent){
+            if(a->parent->right == a){
+                c->parent->right = c;
+            }else if(a->parent->left == a){
+                c->parent->left = c;
+            }
+        }
+
         b->right = c->left;
         if(b->right){
             c->left->parent = b;
@@ -238,6 +163,14 @@ protected:
         Node<Tv,Tk> * b = a->left;
 
         b->parent = a->parent;
+        if(b->parent){
+            if(a->parent->right == a){
+                b->parent->right = b;
+            }else if(a->parent->left == a){
+                b->parent->left = b;
+            }
+        }
+
 
         a->left = b->right;
         if(b->right){
@@ -256,6 +189,14 @@ protected:
         Node<Tv,Tk> * b = a->right;
         Node<Tv,Tk> * c = b->left;
         c->parent = a->parent;
+
+        if(c->parent){
+            if(a->parent->right == a){
+                c->parent->right = c;
+            }else if(a->parent->left == a){
+                c->parent->left = c;
+            }
+        }
 
         a->right = c->left;
         if(a->right){
@@ -281,7 +222,13 @@ protected:
     Node<Tv,Tk> * leftlittle(Node<Tv,Tk> * a){
         Node<Tv,Tk> * b = a->right;
         b->parent = a->parent;
-
+        if(b->parent){
+            if(a->parent->right == a){
+                b->parent->right = b;
+            }else if(a->parent->left == a){
+                b->parent->left = b;
+            }
+        }
         a->right = b->left;
         if(b->left){
             b->left->parent = a;
@@ -289,6 +236,7 @@ protected:
 
         b->left = a;
         a->parent = b;
+        
         fixheight(a);
         fixheight(b);
         return b;
@@ -354,6 +302,83 @@ protected:
             deleteTree(a->left);
             deleteTree(a->right);
             deleteTree(a);
+        }
+    }
+
+    void deleteNoderev(Node<Tv,Tk> * ptr){
+        if(!ptr){
+            throw "DeleteNodeException";
+        }
+        if((!ptr->left) && (!ptr->right)){
+            Node<Tv,Tk> * paren = ptr->parent;
+            if(paren){
+                if(ptr->parent->right == ptr){
+                    ptr->parent->right = nullptr;
+                } else if(ptr->parent->left == ptr){
+                    ptr->parent->left = nullptr;
+                }
+                delete ptr;
+                while(paren->parent != nullptr){
+                    fixheight(paren);
+                    paren = balancing(paren);
+                    paren = paren->parent;
+                }
+                root = balancing(root);
+                fixheight(root);
+            }
+        } else {
+            if(((ptr->left) && (ptr->right) && (ptr->right->height < ptr->left->height)) || (!ptr->right)&&(ptr->left)){
+                Node<Tv,Tk> * curr = ptr->left;
+                while(curr->right != nullptr){
+                    curr = curr->right;
+                }
+                ptr->key = curr->key;
+                ptr->value = curr->value;
+                deleteNoderev(curr);
+
+            } else if((ptr->left) && (ptr->right) && (ptr->right->height > ptr->left->height) || (!ptr->left)&&(ptr->right)){
+                Node<Tv,Tk> * curr = ptr->right;
+                while(curr->left != nullptr){
+                    curr = curr->left;
+                }
+                ptr->key = curr->key;
+                ptr->value = curr->value;
+                deleteNoderev(curr);
+            } else if((ptr->left) && (ptr->right) && (ptr->right->height == ptr->left->height)){
+                Node<Tv,Tk> * currR = ptr->right;
+                while(currR->left != nullptr){
+                    currR = currR->left;
+                }
+                Node<Tv,Tk> * currL = ptr->left;
+                while(currL->right != nullptr){
+                    currL = currL->right;
+                }
+                if(( ptr->key - currL->key) < (currR->key - ptr->key)){
+                    ptr->key = currL->key;
+                    ptr->value = currL->value;
+                    deleteNoderev(currL);
+                } else {
+                    ptr->key = currR->key;
+                    ptr->value = currR->value;
+                    deleteNoderev(currR);
+                }
+            }
+        }
+    }
+
+    void printTreerev(Node<Tv,Tk> *top, int level) {
+        if (top) {
+            printTreerev(top->left, level + 1);
+            for (int i = 0; i < level; i++)
+                std::cout << "_______";
+            std::cout << top->key << "(" << ((top->parent)?(top->parent->key):-1) << ")" << "[" << (int)top->height << "]" << std::endl;
+            printTreerev(top->right, level + 1);
+        } else {
+            for (int i = 0; i < level; i++){
+                std::cout << "_______";
+            }
+                    
+            std::cout << "nil" << std::endl;
         }
     }
 private:
