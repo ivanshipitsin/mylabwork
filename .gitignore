@@ -5,3 +5,4 @@ lab1/main
 *.stackdump
 *.json
 lab3/main
+*.txt

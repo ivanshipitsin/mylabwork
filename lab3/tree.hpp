@@ -10,6 +10,10 @@ public:
     Node<Tv, Tk> * right;
     Node<Tv, Tk> * left;
     Node<Tv,Tk> * parent;
+    Node(){
+        value;
+        key;
+    }
 };
 
 template<class Tv, class Tk>
@@ -85,6 +89,45 @@ public:
                 curr = curr->parent;
             }
         }
+    }
+
+    Tree<Tv,Tk> * mapNode(Node<Tv,Tk>(*f)(Node<Tv,Tk> elem)){
+        Node<Tv,Tk> * curr = root;
+        Node<Tv,Tk> * lastNode = nullptr;
+        Tree<Tv,Tk> * newtree = new Tree();
+
+        while(curr != nullptr){
+            if(lastNode == curr->parent){
+                if(curr->left){
+                    lastNode = curr;
+                    curr = curr->left;
+                } else if (curr->right){
+                    lastNode = curr;
+                    curr = curr->right;
+                } else {
+                    Node<Tv,Tk> newnode = f(*curr);
+                    newtree->addNode(newnode->key, newnode->value);
+                    lastNode = curr;
+                    curr = curr->parent;
+                }
+            } else if(lastNode == curr->left){
+                if(curr->right){
+                    lastNode = curr;
+                    curr = curr->right;
+                } else {
+                    Node<Tv,Tk> newnode = f(*curr);
+                    newtree->addNode(newnode->key, newnode->value);
+                    lastNode = curr;
+                    curr = curr->parent;
+                }
+            } else if(lastNode == curr->right){
+                Node<Tv,Tk> newnode = f(*curr);
+                newtree->addNode(newnode->key, newnode->value);
+                lastNode = curr;
+                curr = curr->parent;
+            }
+        }
+        return newtree;
     }
 
     void merge(Tree<Tv,Tk> * onetree){
@@ -380,7 +423,7 @@ protected:
 
         return b;
     }     
-    Node<Tk,Tv>* leftbig(Node<Tv,Tk> * a){
+    Node<Tv,Tk>* leftbig(Node<Tv,Tk> * a){
         Node<Tv,Tk> * b = a->right;
         Node<Tv,Tk> * c = b->left;
         c->parent = a->parent;
