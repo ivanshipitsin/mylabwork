@@ -127,6 +127,13 @@ public:
         }
         return newtree;
     }
+
+    Tree<Tv,Tk> * subTree(int key){
+        Tree<Tv,Tk> newtree = new Tree();
+        Node<Tv,Tk> * ptr = foundNode(key);
+        newtree.root = ptr; 
+        return newtree;
+    }
 protected:
     Node<Tv,Tk> * foundNoderev(Tk key, Node<Tv,Tk> * ptr){
         if(!ptr){

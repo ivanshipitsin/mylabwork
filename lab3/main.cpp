@@ -21,6 +21,9 @@ int main(int argc, char ** argv){
 		std::cout << (int)a.HE()<< "\n";
 		a.printTree();
 		std::cout << "\t\t---\t\t" << std::endl;
+		a.map(f);
+		a.printTree();
+		std::cout << "\t\t---\t\t" << std::endl;
 		Tree<int,int> * meh = a.where(g);
 		meh->printTree();
 		std::cout << (int)meh->HE()<< "\n";
