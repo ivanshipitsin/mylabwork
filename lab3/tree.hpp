@@ -53,6 +53,80 @@ public:
     ~Tree(){
         deleteTree(root);
     }
+
+    void map(void(*f)(Tv* elem)){
+        Node<Tv,Tk> * curr = root;
+        Node<Tv,Tk> * lastNode = nullptr;
+        while(curr != nullptr){
+            if(lastNode == curr->parent){
+                if(curr->left){
+                    lastNode = curr;
+                    curr = curr->left;
+                } else if (curr->right){
+                    lastNode = curr;
+                    curr = curr->right;
+                } else {
+                    f(&(curr->value));
+                    lastNode = curr;
+                    curr = curr->parent;
+                }
+            } else if(lastNode == curr->left){
+                if(curr->right){
+                    lastNode = curr;
+                    curr = curr->right;
+                } else {
+                    f(&(curr->value));
+                    lastNode = curr;
+                    curr = curr->parent;
+                }
+            } else if(lastNode == curr->right){
+                f(&(curr->value));
+                lastNode = curr;
+                curr = curr->parent;
+            }
+        }
+    }
+
+    Tree<Tv,Tk> * where(bool(*f)(Tv elem)){
+        Node<Tv,Tk> * curr = root;
+        Node<Tv,Tk> * lastNode = nullptr;
+        Tree<Tv,Tk> * newtree = new Tree();
+        while(curr != nullptr){
+            if(lastNode == curr->parent){
+                if(curr->left){
+                    lastNode = curr;
+                    curr = curr->left;
+                } else if (curr->right){
+                    lastNode = curr;
+                    curr = curr->right;
+                } else {
+                    if(f(curr->value)){
+                        newtree->addNode(curr->key, curr->value);
+                    }
+                    lastNode = curr;
+                    curr = curr->parent;
+                }
+            } else if(lastNode == curr->left){
+                if(curr->right){
+                    lastNode = curr;
+                    curr = curr->right;
+                } else {
+                    if(f(curr->value)){
+                        newtree->addNode(curr->key,curr->value);
+                    }
+                    lastNode = curr;
+                    curr = curr->parent;
+                }
+            } else if(lastNode == curr->right){
+                if(f(curr->value)){
+                    newtree->addNode(curr->key,curr->value);
+                }
+                lastNode = curr;
+                curr = curr->parent;
+            }
+        }
+        return newtree;
+    }
 protected:
     Node<Tv,Tk> * foundNoderev(Tk key, Node<Tv,Tk> * ptr){
         if(!ptr){
@@ -370,12 +444,12 @@ protected:
         if (top) {
             printTreerev(top->left, level + 1);
             for (int i = 0; i < level; i++)
-                std::cout << "_______";
-            std::cout << top->key << "(" << ((top->parent)?(top->parent->key):-1) << ")" << "[" << (int)top->height << "]" << std::endl;
+                std::cout << "_________";
+            std::cout << top->key << "(" << ((top->parent)?(top->parent->key):-1) << ")" << "[" << (int)top->height << "]" << "{" << top->value << "}" << std::endl;
             printTreerev(top->right, level + 1);
         } else {
             for (int i = 0; i < level; i++){
-                std::cout << "_______";
+                std::cout << "_________";
             }
                     
             std::cout << "nil" << std::endl;
