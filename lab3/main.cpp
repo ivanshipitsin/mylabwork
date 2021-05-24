@@ -174,7 +174,11 @@ int main(int argc, char ** argv){
 				unsigned int param;
 				stream >> param;
 				if((param < responsis.size() + 1) && (param > 0)){
-					responsis[param - 1]->map(PrintStudent);
+					if(responsis[param - 1]){
+						responsis[param - 1]->map(PrintStudent);
+					}else {
+						std::cout << "respons is empty" << std::endl;
+					}
 				}else {
 					std::cout << "Error command" << std::endl;
 				}
