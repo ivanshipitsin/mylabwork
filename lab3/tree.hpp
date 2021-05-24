@@ -135,7 +135,7 @@ public:
             throw "subTree not founded";
         }
         Node<Tv,Tk> * curr = ptr;
-        Node<Tv,Tk> * lastNode = nullptr;
+        Node<Tv,Tk> * lastNode = ptr->parent;
         while(curr != ptr->parent){
             if(lastNode == curr->parent){
                 if(curr->left){
