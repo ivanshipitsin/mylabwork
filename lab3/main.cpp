@@ -50,6 +50,7 @@ void help(){
 	std::cout << "find <type> [arg] -for search in database " << std::endl;
 	std::cout << "rlist [num] -for print response" << std::endl;
 	std::cout << "help -for this massage" << std::endl;
+	std::cout << "union [num1] [num2] -for this massage" << std::endl;
 	std::cout << "q - for exit" << std::endl;
 }
 
@@ -181,6 +182,14 @@ int main(int argc, char ** argv){
 					}
 				}else {
 					std::cout << "Error command" << std::endl;
+				}
+			}else if(funct == "union"){
+				unsigned int param1, param2;
+				stream >> param1 >> param2;
+				if(responsis[param1 - 1] && responsis[param2 - 1]){
+					responsis[param1-1]->merge(responsis[param2 - 1]);
+				}else {
+					std::cout << "One of respons is nullptr" << std::endl;
 				}
 			}else {
 				std::cout << "Error command, command \"help\" for help)" << std::endl;

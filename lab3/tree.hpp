@@ -131,7 +131,7 @@ public:
     }
 
     void merge(Tree<Tv,Tk> * onetree){
-        Node<Tv,Tk> * curr = onetree.root;
+        Node<Tv,Tk> * curr = onetree->root;
         Node<Tv,Tk> * lastNode = nullptr;
         while(curr != nullptr){
             if(lastNode == curr->parent){
