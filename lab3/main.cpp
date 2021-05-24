@@ -150,6 +150,19 @@ int main(int argc, char ** argv){
 					}else{
 						std::cout << "Error command" << std::endl;
 					}
+				}else if(param == "id"){
+					int id;
+					stream >> id;
+					if(id > 0){
+						Node<Student,int> * ptr = students.foundNode(id);
+						if(!ptr){
+							std::cout << "Not found" << std::endl;
+						}else {
+							PrintStudent(&(ptr->value));
+						}
+					} else {
+						std::cout << "Error command" << std::endl;
+					}
 				}else{
 					std::cout << "Error command" << std::endl;
 				}
