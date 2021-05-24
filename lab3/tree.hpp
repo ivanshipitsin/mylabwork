@@ -54,7 +54,7 @@ public:
         deleteTree(root);
     }
 
-    void map(void(*f)(Tv* elem)){
+    void map(void(*f)(Tv* elem)){ // lrc traversal
         Node<Tv,Tk> * curr = root;
         Node<Tv,Tk> * lastNode = nullptr;
         while(curr != nullptr){
@@ -86,6 +86,39 @@ public:
             }
         }
     }
+
+    void merge(Tree<Tv,Tk> * onetree){
+        Node<Tv,Tk> * curr = onetree.root;
+        Node<Tv,Tk> * lastNode = nullptr;
+        while(curr != nullptr){
+            if(lastNode == curr->parent){
+                if(curr->left){
+                    lastNode = curr;
+                    curr = curr->left;
+                } else if (curr->right){
+                    lastNode = curr;
+                    curr = curr->right;
+                } else {
+                    addNode(curr->key,curr->value);
+                    lastNode = curr;
+                    curr = curr->parent;
+                }
+            } else if(lastNode == curr->left){
+                if(curr->right){
+                    lastNode = curr;
+                    curr = curr->right;
+                } else {
+                    addNode(curr->key,curr->value);
+                    lastNode = curr;
+                    curr = curr->parent;
+                }
+            } else if(lastNode == curr->right){
+                addNode(curr->key,curr->value);
+                lastNode = curr;
+                curr = curr->parent;
+            }
+        }
+    }  
 
     Tree<Tv,Tk> * where(bool(*f)(Tv elem)){
         Node<Tv,Tk> * curr = root;
@@ -165,6 +198,55 @@ public:
             }
         }
         return newtree;
+    }
+
+    Node<Tv,Tk> * foundNodels(std::string path){
+        Node<Tv,Tk> * curr = root;
+        for(int i = 0; i < path.length();i++){
+            if(path[i] == 'r'){
+                if(curr){
+                    curr = curr->right;
+                }else{
+                    return nullptr;
+                }
+            } else if(path[i] == 'l'){
+                if(curr){
+                    curr = curr->left;
+                } else {
+                    return nullptr;
+                }
+            }
+        }
+        return curr;
+    }
+
+    Node<Tv,Tk> * foundNodelsd(std::string path, int key){
+        Node<Tv,Tk> * curr = foundNode(key);
+        if(!curr){
+            return nullptr;
+        }
+        for(int i = 0; i < path.length();i++){
+            if(path[i] == 'r'){
+                if(curr){
+                    curr = curr->right;
+                }else{
+                    return nullptr;
+                }
+            } else if(path[i] == 'l'){
+                if(curr){
+                    curr = curr->left;
+                } else {
+                    return nullptr;
+                }
+            } else if(path[i] == 'p'){
+                if(curr){
+                    curr = curr->parent;
+                } else {
+                    return nullptr;
+                }
+            }
+        }
+        return curr;
     }
 protected:
     Node<Tv,Tk> * foundNoderev(Tk key, Node<Tv,Tk> * ptr){
