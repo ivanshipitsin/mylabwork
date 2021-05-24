@@ -131,7 +131,39 @@ public:
     Tree<Tv,Tk> * subTree(int key){
         Tree<Tv,Tk> newtree = new Tree();
         Node<Tv,Tk> * ptr = foundNode(key);
-        newtree.root = ptr; 
+        if(!ptr){
+            throw "subTree not founded";
+        }
+        Node<Tv,Tk> * curr = ptr;
+        Node<Tv,Tk> * lastNode = nullptr;
+        while(curr != ptr->parent){
+            if(lastNode == curr->parent){
+                if(curr->left){
+                    lastNode = curr;
+                    curr = curr->left;
+                } else if (curr->right){
+                    lastNode = curr;
+                    curr = curr->right;
+                } else {
+                    newtree->addNode(curr->key, curr->value);
+                    lastNode = curr;
+                    curr = curr->parent;
+                }
+            } else if(lastNode == curr->left){
+                if(curr->right){
+                    lastNode = curr;
+                    curr = curr->right;
+                } else {
+                    newtree->addNode(curr->key,curr->value);
+                    lastNode = curr;
+                    curr = curr->parent;
+                }
+            } else if(lastNode == curr->right){
+                newtree->addNode(curr->key,curr->value);
+                lastNode = curr;
+                curr = curr->parent;
+            }
+        }
         return newtree;
     }
 protected:
