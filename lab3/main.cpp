@@ -10,7 +10,9 @@
 #include <vector>
 
 static std::string FindGrop;
-
+static std::string FindFirst;
+static std::string FindMiddle;
+static std::string FindLast;
 /// for test
 void f(int * a){
 	*a = *a % 2;
@@ -23,6 +25,21 @@ bool g(int a){
 
 bool FindFromGroup(Student elem){
 	return elem.GetGroup() == FindGrop;
+}
+
+bool FindFromFIO(Student elem){
+	return ((elem.GetFirstName() == FindFirst) &&(elem.GetMiddleName() == FindMiddle) &&(elem.GetLastName() == FindLast));
+}
+bool FindFromF(Student elem){
+	return (elem.GetFirstName() == FindFirst);
+}
+
+bool FindFromI(Student elem){
+	return (elem.GetMiddleName() == FindMiddle);
+}
+
+bool FindFromO(Student elem){
+	return (elem.GetLastName() == FindLast);
 }
 
 void PrintStudent(Student * elem){
@@ -80,6 +97,54 @@ int main(int argc, char ** argv){
 					if(arg.length() > 0){
 						FindGrop = arg;
 						Tree<Student,int> * respons = students.where(FindFromGroup);
+						responsis.push_back(respons);
+						std::cout << "Respons save" << std::endl;
+					}else{
+						std::cout << "Error command" << std::endl;
+					}
+				}else if(param == "fio"){
+					std::string arg1;
+					std::string arg2;
+					std::string arg3;
+					stream >> arg1 >> arg2 >> arg3;
+					if(arg1.length() > 0 && arg2.length() > 0 && arg3.length() > 0){
+						FindFirst = arg1;
+						FindMiddle = arg2;
+						FindLast = arg3;
+						Tree<Student,int> * respons = students.where(FindFromFIO);
+						responsis.push_back(respons);
+						std::cout << "Respons save" << std::endl;
+					} else {
+						std::cout << "Error command" << std::endl;
+					}
+				}else if(param == "i"){
+					std::string arg;
+					stream >> arg;
+					if(arg.length() > 0){
+						FindMiddle = arg;
+						Tree<Student,int> * respons = students.where(FindFromI);
+						responsis.push_back(respons);
+						std::cout << "Respons save" << std::endl;
+					}else{
+						std::cout << "Error command" << std::endl;
+					}
+				}else if(param == "f"){
+					std::string arg;
+					stream >> arg;
+					if(arg.length() > 0){
+						FindFirst = arg;
+						Tree<Student,int> * respons = students.where(FindFromF);
+						responsis.push_back(respons);
+						std::cout << "Respons save" << std::endl;
+					}else{
+						std::cout << "Error command" << std::endl;
+					}
+				}else if(param == "o"){
+					std::string arg;
+					stream >> arg;
+					if(arg.length() > 0){
+						FindLast = arg;
+						Tree<Student,int> * respons = students.where(FindFromO);
 						responsis.push_back(respons);
 						std::cout << "Respons save" << std::endl;
 					}else{
