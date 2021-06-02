@@ -1,7 +1,7 @@
 #ifndef _STUDENTS_HPP_
 #define _STUDENTS_HPP_ 1
 #include <string>
-
+#include <vector>
 
 class Person {
 	private:
@@ -65,6 +65,7 @@ class Student : public Person {
 class Teacher : public Person{
     private:
         std::string subject;
+        std::vector<std::string> groups;
     public:
         Teacher(std::string name1, std::string name2, std::string name3, std::string group){
             SetFirstName(name1);
@@ -82,6 +83,13 @@ class Teacher : public Person{
 
         std::string WhoIs(){
             return "Teacher";
+        }
+
+        void addGroup(std::string grp){
+            groups.push_back(grp);
+        }
+        std::vector<std::string> GetGroup(){
+            return groups;
         }
 };
 
